@@ -8,6 +8,6 @@ void	*alloc_large(size_t size)
 
 	size = 0;
 	printf("%s\n", "merci de coder la fonction");
-	pthread_mutex_unlock(mem.mutex);
+	pthread_mutex_unlock(&(mem.mutex));
 	return(ptr);
 }

@@ -9,6 +9,6 @@ void	*alloc_small(size_t size)
 
 
 	printf("%s\n", "merci de coder la fonction");	
-	pthread_mutex_unlock(mem.mutex);
+	pthread_mutex_unlock(&(mem.mutex));
 	return(ptr);
 }
