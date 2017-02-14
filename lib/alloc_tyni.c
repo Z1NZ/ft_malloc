@@ -42,6 +42,7 @@ void	*tyni_push_back()
 	tmp = mem.m_tyni;
 	while(tmp->next)
 		tmp = tmp->next;
+
 	new = tmp->ptr + TYNI_MAX;
 	tmp->next = new;
 	new->next = NULL;
@@ -57,6 +58,7 @@ void	*add_page()
 	t_block		*tmp;
 
 	ptr = (t_block *)mmap(NULL, mem.page, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE | MAP_SHARED , -1, 0);
+	mem.size_tyni += mem.page;
 	ptr->size += TYNI_BLOCK;
 	ptr->info |= OPT_MAP_HEAD;
 	ptr->next = NULL;

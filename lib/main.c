@@ -40,6 +40,10 @@ int main(int argc, char const *argv[])
 	i = 0;
 	ptr = NULL;
 	ptr2 = NULL;
+
+	printf("taille du block ====		[%zu]		====\n", sizeof(t_block));
+
+
 	if (argc == 2)
 		ptr = (char *)ft_malloc(atoi(argv[1]));
 	while(i <= 94)
@@ -68,7 +72,7 @@ int main(int argc, char const *argv[])
 	printf("value ptr [%s]\n", ptr);
 
 	i = 0;
-	while (i < 50)
+	while (i < 300)
 	{
 		printf("%d => ", i);
 		ptr2 = (char *)ft_malloc(atoi(argv[1]));

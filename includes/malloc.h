@@ -15,11 +15,17 @@
 #define OPT_LARGE			8
 #define OPT_MAP_HEAD		16
 #define OPT_6				32
-#define TYNI_MAX			96 // la taille de la struct block fait 32 donc 32 + 96 = 128
-#define TYNI_BLOCK			128
+#define TYNI_MAX			32 // la taille de la struct block fait 32 donc 32 + 96 = 128
+#define TYNI_BLOCK			TYNI_MAX + 32
 #define SMALL_MIN			512
 #define SMALL_MAX			1024	
 #define LARGE_MIN			1024
+
+
+typedef	struct s_test
+{
+	char		t[383];
+}				t_test;
 
 typedef struct			s_block
 {
