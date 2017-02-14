@@ -22,11 +22,6 @@
 #define LARGE_MIN			1024
 
 
-typedef	struct s_test
-{
-	char		t[383];
-}				t_test;
-
 typedef struct			s_block
 {
 	size_t				size;		/*la taille du bloc alloué*/
@@ -39,7 +34,7 @@ typedef struct			s_block
 typedef struct			s_mem
 {
 	pthread_mutex_t		mutex; // variable pour la getion des mutex 
-	size_t				page;	// taille d'une page 
+	int 			page;	// taille d'une page 
 	size_t				size_tyni; // taille total de la memoire donner a tyni
 	size_t				use_tyni; // taille total uttilise tyni
 	t_block				*m_tyni; // pointeur sur la list chainneé tyni
@@ -48,8 +43,15 @@ typedef struct			s_mem
 t_mem mem; // global general memoire 
 
 void	*alloc_large(size_t size);
-void	*alloc_tyni();
+void	*alloc_tyni(size_t size);
 void	*alloc_small(size_t size);
+
+
+/*
+** TOOLS 
+*/
+void			*find_fusion_location(t_block *block, size_t size);
+
 
 
 #endif

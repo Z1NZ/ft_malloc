@@ -16,13 +16,13 @@
 
 
 
-void	*ft_malloc(size_t size)
+void	*ft_malloc(size_t size) 
 {
 	pthread_mutex_lock(&(mem.mutex));
 	if (mem.page == 0)
 		mem.page = getpagesize();
 	if (size < TYNI_MAX)
-		return (alloc_tyni(size));
+		return (alloc_tyni(1)); // rajouter dans size la taille demander en nombre de block
 	else if (size < SMALL_MAX)
 		return (alloc_small(size));
 	else
