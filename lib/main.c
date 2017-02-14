@@ -46,7 +46,7 @@ int main(int argc, char const *argv[])
 
 	if (argc == 2)
 		ptr = (char *)ft_malloc(atoi(argv[1]));
-	while(i <= 94)
+	while(i <= atoi(argv[1]))
 	{
 		ptr[i] = 'a';
 		i++;
@@ -57,7 +57,7 @@ int main(int argc, char const *argv[])
 	if (argc == 2)
 		ptr2 = (char *)ft_malloc(atoi(argv[1]));
 	i = 0;
-	while(i <= 94)
+	while(i <= atoi(argv[1]))
 	{
 		ptr2[i] = 'b';
 		i++;
