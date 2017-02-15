@@ -19,12 +19,17 @@
 void	*ft_malloc(size_t size) 
 {
 	pthread_mutex_lock(&(mem.mutex));
+
+
+	/// code un repartiteur de charge proportionnel a espace libre dans les maillon 
+
+
 	if (mem.page == 0)
 		mem.page = getpagesize();
-	if (size < TYNI_MAX)
+	if (size <= TYNI_MAX)
 		return (alloc_tyni(1)); // rajouter dans size la taille demander en nombre de block
-	else if (size < SMALL_MAX)
-		return (alloc_small(size));
+	else if (size < SMALL_MIN)
+		return (alloc_small(1));
 	else
 		return (alloc_large(size));
 }
@@ -40,12 +45,14 @@ int main(int argc, char const *argv[])
 	i = 0;
 	ptr = NULL;
 	ptr2 = NULL;
-
 	printf("taille du block ====		[%zu]		====\n", sizeof(t_block));
-
-
 	if (argc == 2)
 		ptr = (char *)ft_malloc(atoi(argv[1]));
+
+	if (!ptr)
+	{
+		return(1);
+	}
 	while(i <= atoi(argv[1]))
 	{
 		ptr[i] = 'a';
@@ -62,15 +69,12 @@ int main(int argc, char const *argv[])
 		ptr2[i] = 'b';
 		i++;
 	}
-
 	printf("------addr ptr2	[%p]\n", ptr2);
-	printf("value ptr2	[%p\n]", ptr2);
+	printf("value ptr2	[%s]\n\n\n\n\n\n\n",ptr2);
+
 	printf("taille de la espace[%zu]\ntaille de l'espace uttiliser[%zu]\n\n\n", mem.size_tyni, mem.use_tyni);
-
-
 	printf("addr ptr  [%p]\n", ptr);
 	printf("value ptr [%s]\n", ptr);
-
 	i = 0;
 	while (i < 300)
 	{
@@ -79,6 +83,11 @@ int main(int argc, char const *argv[])
 		printf("%p\n", ptr2);
 		i++;
 	}
+
+	printf("\nMemory tyni -> (%zu / %zu)\n", mem.use_tyni, mem.size_tyni);
+	printf("\nMemory small -> (%zu / %zu)\n", mem.use_small, mem.size_small);
+
+
 
 	// LIST_HEAD(head);
 	// int page = getpagesize();
