@@ -9,16 +9,82 @@
 /*   Updated: 2017/02/15 16:05:14 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "malloc.h"
+
+t_block	*init_large(size_t size)
+{
+	t_block *ptr;
+
+	ptr = (t_block *)mmap(NULL, (size + SIZE_ST_HEAD), FLAG_MALLOC, -1, 0);
+	if (ptr == ((void *)-1))
+		return (NULL);
+	ptr->size = size;
+	ptr->info |= OPT_FREE;
+	ptr->info |= OPT_MAP_HEAD;
+	ptr->ptr = ptr->data;
+	ptr->next = NULL; 
+	g_mem.size_large += size;
+	g_mem.use_large += size;
+	g_mem.m_large = ptr;
+	return(ptr);
+}
+
+t_block	*find_large_space(size_t size)
+{
+	t_block	*ptr;
+	t_block *tmp;
+
+	tmp = NULL;
+	ptr = g_mem.m_large;
+	while(ptr)
+	{
+		if (!CHECK_BIT(ptr->info, OPT_FREE) && ptr->size >= size)
+		{
+			if (!tmp || (tmp->size - size) > (ptr->size - size))
+				tmp = ptr;
+		}
+		ptr = ptr->next;
+	}
+	if (tmp)
+		tmp->info |= OPT_FREE;
+	return (tmp);
+}
+
+t_block	*add_large_list(size)
+{
+	t_block	*ptr;
+	t_block	*tmp;
+
+	ptr = g_mem.m_large;
+	while(ptr->next)
+		ptr = ptr->next;
+	tmp = (t_block *)mmap(NULL, (size + SIZE_ST_HEAD), FLAG_MALLOC, -1, 0);
+	if (tmp == ((void *)-1))
+		return (NULL);
+	tmp->size = size;
+	tmp->info |= OPT_FREE;
+	tmp->info |= OPT_MAP_HEAD;
+	tmp->ptr = ptr->data;
+	g_mem.size_large += size;
+	g_mem.use_large += size;
+	tmp->next = NULL;
+	ptr->next = tmp;
+	return(tmp);
+}
+
 
 void	*alloc_large(size_t size)
 {
-	void *ptr;
+	t_block *ptr;
 
 	ptr = NULL;
-
-	size = 0;
-	printf("%s\n", "merci de coder la fonction");
-	pthread_mutex_unlock(&(mem.mutex));
-	return(ptr);
+	if (g_mem.size_small == 0)
+		ptr = init_large(size);
+	else if ((g_mem.size_large - g_mem.use_large) >= size)
+		ptr = find_large_space(size);
+	if (!ptr)
+		add_large_list(size);
+	pthread_mutex_unlock(&(g_mem.mutex));
+	return (((ptr) ? ptr->data : NULL));
 }

@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/02/15 16:23:41 by srabah            #+#    #+#             */
+/*   Updated: 2017/02/15 16:26:14 by srabah           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 #include "malloc.h"
 
 #include <sys/types.h>
@@ -15,17 +26,14 @@
 #define align4(x) (((((x)-1)>>2)<<2) + 4)
 
 
-
 void	*ft_malloc(size_t size) 
 {
-	pthread_mutex_lock(&(mem.mutex));
-
-
+	pthread_mutex_lock(&(g_mem.mutex));
 	/// code un repartiteur de charge proportionnel a espace libre dans les maillon 
 
 
-	if (mem.page == 0)
-		mem.page = getpagesize();
+	if (g_mem.page == 0)
+		g_mem.page = getpagesize();
 	if (size <= TYNI_MAX)
 		return (alloc_tyni(1)); // rajouter dans size la taille demander en nombre de block
 	else if (size < SMALL_MIN)
@@ -47,46 +55,46 @@ int main(int argc, char const *argv[])
 	ptr2 = NULL;
 	printf("taille du block ====		[%zu]		====\n", sizeof(t_block));
 	if (argc == 2)
-		ptr = (char *)ft_malloc(atoi(argv[1]));
+		ptr = (char *)ft_malloc(atol(argv[1]));
+	printf("%s\n", "test");	
 
 	if (!ptr)
 	{
 		return(1);
 	}
-	while(i <= atoi(argv[1]))
-	{
-		ptr[i] = 'a';
-		i++;
-	}
+	// while(i <= atoi(argv[1]))
+	// {
+	// 	ptr[i] = 'a';
+	// 	i++;
+	// }
 	printf("------addr ptr  [%p]\n", ptr);
-	printf("value ptr [%s]\n", ptr);
-	printf("taille de la espace%zu\ntaille de l'espace uttiliser %zu\n\n\n", mem.size_tyni, mem.use_tyni);
+	// printf("value ptr [%s]\n", ptr);
+	printf("taille de la espace%zu\ntaille de l'espace uttiliser %zu\n\n\n", g_mem.size_tyni, g_mem.use_tyni);
 	if (argc == 2)
-		ptr2 = (char *)ft_malloc(atoi(argv[1]));
+		ptr2 = (char *)ft_malloc(atol(argv[1]));
 	i = 0;
-	while(i <= atoi(argv[1]))
-	{
-		ptr2[i] = 'b';
-		i++;
-	}
+	// while(i <= atoi(argv[1]))
+	// {
+	// 	ptr2[i] = 'b';
+	// 	i++;
+	// }
 	printf("------addr ptr2	[%p]\n", ptr2);
-	printf("value ptr2	[%s]\n\n\n\n\n\n\n",ptr2);
+	// printf("value ptr2	[%s]\n\n\n\n\n\n\n",ptr2);
 
-	printf("taille de la espace[%zu]\ntaille de l'espace uttiliser[%zu]\n\n\n", mem.size_tyni, mem.use_tyni);
+	printf("taille de la espace[%zu]\ntaille de l'espace uttiliser[%zu]\n\n\n", g_mem.size_tyni, g_mem.use_tyni);
 	printf("addr ptr  [%p]\n", ptr);
 	printf("value ptr [%s]\n", ptr);
 	i = 0;
 	while (i < 300)
 	{
 		printf("%d => ", i);
-		ptr2 = (char *)ft_malloc(atoi(argv[1]));
-		printf("%p\n", ptr2);
+		ptr2 = (char *)ft_malloc(atol(argv[1]));
+		printf("%p null = %p\n", ptr2, NULL);
 		i++;
 	}
-
-	printf("\nMemory tyni -> (%zu / %zu)\n", mem.use_tyni, mem.size_tyni);
-	printf("\nMemory small -> (%zu / %zu)\n", mem.use_small, mem.size_small);
-
+	printf("\ng_Memory tyni -> (%zu / %zu)\n", g_mem.use_tyni, g_mem.size_tyni);
+	printf("\ng_Memory small -> (%zu / %zu)\n", g_mem.use_small, g_mem.size_small);
+	printf("\ng_Memory large -> (%zu / %zu)\n", g_mem.use_large, g_mem.size_large);
 
 
 	// LIST_HEAD(head);
