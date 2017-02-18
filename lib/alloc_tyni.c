@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/15 15:33:47 by srabah            #+#    #+#             */
-/*   Updated: 2017/02/18 16:00:55 by srabah           ###   ########.fr       */
+/*   Updated: 2017/02/18 17:36:48 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 static inline	void	set_block(t_block *ptr, size_t size, int on)
 {
 	ptr->size = size;
+	ptr->info |= OPT_TYNI;
 	if (on)
 		ptr->info |= OPT_FREE;
 	ptr->ptr = ptr->data;
@@ -103,7 +104,6 @@ void					*alloc_tyni(size_t size)
 	}
 	if (ptr && ptr != ((void *)-1))
 		set_block(ptr, TYNI_BLOCK * size, OPT_FREE);
-
 	pthread_mutex_unlock(&(g_mem.mutex));
 	return (((ptr && ptr != ((void *)-1)) ? ptr->data : NULL));
 }

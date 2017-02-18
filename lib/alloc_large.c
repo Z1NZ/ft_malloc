@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/14 08:44:38 by srabah            #+#    #+#             */
-/*   Updated: 2017/02/18 15:57:07 by srabah           ###   ########.fr       */
+/*   Updated: 2017/02/18 18:23:38 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ t_block	*init_large(size_t size)
 	ptr->size = size;
 	ptr->info |= OPT_FREE;
 	ptr->info |= OPT_MAP_HEAD;
+	ptr->info |= OPT_LARGE;
 	ptr->ptr = ptr->data;
 	ptr->next = NULL; 
 	g_mem.size_large += size;
@@ -65,6 +66,7 @@ t_block	*add_large_list(size)
 	tmp->size = size;
 	tmp->info |= OPT_FREE;
 	tmp->info |= OPT_MAP_HEAD;
+	tmp->info |= OPT_LARGE;
 	tmp->ptr = ptr->data;
 	g_mem.size_large += size;
 	g_mem.use_large += size;
@@ -82,7 +84,12 @@ void	*alloc_large(size_t size)
 	if (g_mem.size_large == 0)
 		ptr = init_large(size);
 	else if ((g_mem.size_large - g_mem.use_large) >= size)
+	{
+
 		ptr = find_large_space(size);
+		if (ptr)
+			g_mem.use_large += ptr->size;
+	}
 	if (!ptr)
 		ptr = add_large_list(size);
 	pthread_mutex_unlock(&(g_mem.mutex));

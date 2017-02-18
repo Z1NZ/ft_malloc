@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/15 16:21:17 by srabah            #+#    #+#             */
-/*   Updated: 2017/02/18 16:00:51 by srabah           ###   ########.fr       */
+/*   Updated: 2017/02/18 17:37:09 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 static inline void	set_block(t_block *ptr, size_t size, int on)
 {
 	ptr->size = size;
+	ptr->info |= OPT_SMALL;
 	if (on)
 		ptr->info |= OPT_FREE;
 	ptr->ptr = ptr->data;

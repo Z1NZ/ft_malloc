@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/15 16:23:41 by srabah            #+#    #+#             */
-/*   Updated: 2017/02/18 15:57:29 by srabah           ###   ########.fr       */
+/*   Updated: 2017/02/18 18:27:50 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "malloc.h"
@@ -58,18 +58,15 @@ int main(int argc, char const *argv[])
 		ptr = (char *)ft_malloc(atol(argv[1]));
 	if (!ptr)
 		return(1);
+	ft_free(ptr);
 	printf("------addr ptr  [%p]\n", ptr);
-
-
-
-
 
 	while(i < 100)
 	{
 		ptr = (char *)ft_malloc(atol(argv[1]));
+		ft_free(ptr);
 		i++;
 	}
-	ft_free(ptr);
 	if (!ptr)
 		return(1);
 	// while(i <= atoi(argv[1]))
@@ -100,9 +97,6 @@ int main(int argc, char const *argv[])
 	// 	printf("%p null = %p\n", ptr2, NULL);
 	// 	i++;
 	// }
-	printf("\ng_Memory tyni -> (%zu / %zu)\n", g_mem.use_tyni, g_mem.size_tyni);
-	printf("\ng_Memory small -> (%zu / %zu)\n", g_mem.use_small, g_mem.size_small);
-	printf("\ng_Memory large -> (%zu / %zu)\n", g_mem.use_large, g_mem.size_large);
 
 	// LIST_HEAD(head);
 	// int page = getpagesize();
@@ -122,5 +116,21 @@ int main(int argc, char const *argv[])
 	// printf("[%p]", toto);
 	// toto = malloc(0);
 	// printf("[%p]", toto);
+
+	t_block *tmp;
+
+	tmp = g_mem.m_small;
+	int j = 0;
+	while(tmp)
+	{
+		printf(RED"pos = [%d]"GRN"addr = [%p]" CYN "size = [%zu]"RESET" info = [%d]\n", j, tmp, tmp->size, tmp->info);
+		tmp = tmp->next;
+		j++;
+	}
+
+	printf("\ng_Memory tyni -> (%zu / %zu)\n", g_mem.use_tyni, g_mem.size_tyni);
+	printf("\ng_Memory small -> (%zu / %zu)\n", g_mem.use_small, g_mem.size_small);
+	printf("\ng_Memory large -> (%zu / %zu)\n", g_mem.use_large, g_mem.size_large);
+
 	return 0;
 }

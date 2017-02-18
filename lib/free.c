@@ -6,40 +6,56 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/17 11:44:30 by srabah            #+#    #+#             */
-/*   Updated: 2017/02/18 16:01:08 by srabah           ###   ########.fr       */
+/*   Updated: 2017/02/18 18:18:44 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "malloc.h"
 
+/// add fonction super spliter
+void	free_splite_block(t_block *ptr, size_t block_size, int type)
+{
+	t_block *tmp;
+	t_block *new;
+	int		nb_block;
 
-#define RED   "\x1B[31m"
-#define GRN   "\x1B[32m"
-#define YEL   "\x1B[33m"
-#define BLU   "\x1B[34m"
-#define MAG   "\x1B[35m"
-#define CYN   "\x1B[36m"
-#define WHT   "\x1B[37m"
-#define RESET "\x1B[0m"
+	tmp = ptr;
+	nb_block = tmp->size / block_size;
+	while(nb_block)
+	{
+		new = tmp->ptr + (block_size - SIZE_ST_HEAD);
+		tmp->next = new;
+		tmp->size = block_size;
+		ptr->info |= type;
+		ptr->info ^= OPT_FREE;
+		ptr->ptr = ptr->data;
+		tmp = tmp->next;
+		nb_block--;
+	}
 
-void ft_free(void *ptr)
+}
+
+void	ft_free(void *ptr)
 {
 	ptr -= OFFSETOFF(t_block, data);
+
 	((t_block *)(ptr))->info ^= OPT_FREE;
-
+	if (CHECK_BIT(((t_block *)(ptr))->info, OPT_TYNI))
+	{
+		g_mem.use_tyni -= ((t_block *)(ptr))->size;
+		if (((t_block *)(ptr))->size > TYNI_BLOCK)
+			free_splite_block(((t_block *)(ptr)), TYNI_BLOCK, OPT_TYNI);
+	}
+	else if (CHECK_BIT(((t_block *)(ptr))->info, OPT_SMALL))
+	{
+		g_mem.use_small -= ((t_block *)(ptr))->size;
+		if (((t_block *)(ptr))->size > SMALL_BLOCK)
+			free_splite_block(((t_block *)(ptr)), SMALL_BLOCK, OPT_SMALL);
+	}
+	else if (CHECK_BIT(((t_block *)(ptr))->info, OPT_LARGE))
+	{
+		g_mem.use_large -= ((t_block *)(ptr))->size;
+		//gestion specifique du type large
+	}
 	if (CHECK_BIT(((t_block *)(ptr))->info, OPT_MAP_HEAD))
-	{
-		printf("GRN%sRESET \n", "SUPER PAGE   faire la fonction de getion des unmap");		
-	}
-	t_block *tmp;
-
-	tmp = g_mem.m_small;
-	int j = 0;
-	while(tmp)
-	{
-		printf(RED"pos = [%d]"GRN"addr = [%p]" CYN "size = [%zu]"RESET" info = [%d]\n", j, tmp, tmp->size, tmp->info);
-		if (ptr == tmp)
-			printf(RED "\n\n\nONIZUKA\n\n\n" RESET);
-		tmp = tmp->next;
-		j++;
-	}
+		printf(GRN"%s\n"RESET , "SUPER PAGE   faire la fonction de getion des unmap");		
 }

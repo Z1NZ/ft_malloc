@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/15 16:25:37 by srabah            #+#    #+#             */
-/*   Updated: 2017/02/18 15:00:13 by srabah           ###   ########.fr       */
+/*   Updated: 2017/02/18 18:09:52 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,14 @@
 # include <sys/types.h>
 # include <sys/mman.h>
 
+# define RED   "\x1B[31m"
+# define GRN   "\x1B[32m"
+# define YEL   "\x1B[33m"
+# define BLU   "\x1B[34m"
+# define MAG   "\x1B[35m"
+# define CYN   "\x1B[36m"
+# define WHT   "\x1B[37m"
+# define RESET "\x1B[0m"
 # define CHECK_BIT(var,pos)	(var & pos)
 # define OPT_FREE			1
 # define OPT_TYNI			2
