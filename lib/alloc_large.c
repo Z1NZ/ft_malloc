@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/14 08:44:38 by srabah            #+#    #+#             */
-/*   Updated: 2017/02/15 16:05:14 by srabah           ###   ########.fr       */
+/*   Updated: 2017/02/18 15:57:07 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,12 +79,12 @@ void	*alloc_large(size_t size)
 	t_block *ptr;
 
 	ptr = NULL;
-	if (g_mem.size_small == 0)
+	if (g_mem.size_large == 0)
 		ptr = init_large(size);
 	else if ((g_mem.size_large - g_mem.use_large) >= size)
 		ptr = find_large_space(size);
 	if (!ptr)
-		add_large_list(size);
+		ptr = add_large_list(size);
 	pthread_mutex_unlock(&(g_mem.mutex));
-	return (((ptr) ? ptr->data : NULL));
+	return (((ptr && ptr != ((void *)-1)) ? ptr->data : NULL));
 }

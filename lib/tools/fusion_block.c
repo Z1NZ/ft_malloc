@@ -31,7 +31,7 @@ void	*find_fusion_location(t_block *block, size_t size)
 	{
 		i = 0;
 		tmp = ptr;
-		while (tmp && (!CHECK_BIT(tmp->info, OPT_FREE)))
+		while (tmp && (!CHECK_BIT(tmp->info, OPT_FREE))) /// verifer que il ny a pas de tete page entre les fusion 
 		{
 			i++;
 			if (i == size)

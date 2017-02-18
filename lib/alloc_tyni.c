@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/15 15:33:47 by srabah            #+#    #+#             */
-/*   Updated: 2017/02/15 16:21:09 by srabah           ###   ########.fr       */
+/*   Updated: 2017/02/18 16:00:55 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static inline	void	set_block(t_block *ptr, size_t size, int on)
 		g_mem.use_tyni += size;
 }
 
-static inline	void	set_page(t_block *ptr, size_t size_block)
+static inline	void	set_page(t_block *ptr, size_t size_block, int nb)
 {
 	int		i;
 	int		len;
@@ -32,6 +32,7 @@ static inline	void	set_page(t_block *ptr, size_t size_block)
 	i = 1;
 	new = NULL;
 	len = g_mem.page / (size_block);
+	len = len * nb;
 	tmp = ptr;
 	while (i < len)
 	{
@@ -44,15 +45,15 @@ static inline	void	set_page(t_block *ptr, size_t size_block)
 	tmp->next = NULL;
 }
 
-static void				*add_page(void)
+static void				*add_page(size_t size)
 {
 	t_block		*ptr;
 	t_block		*tmp;
 
-	ptr = (t_block *)mmap(NULL, g_mem.page, FLAG_MALLOC, -1, 0);
+	ptr = (t_block *)mmap(NULL, (g_mem.page * size), FLAG_MALLOC, -1, 0);
 	if (ptr == ((void *)-1))
 		return (NULL);
-	g_mem.size_tyni += g_mem.page;
+	g_mem.size_tyni += g_mem.page * size;
 	tmp = g_mem.m_tyni;
 	while (tmp->next)
 		tmp = tmp->next;
@@ -60,24 +61,23 @@ static void				*add_page(void)
 	ptr->info |= OPT_MAP_HEAD;
 	set_block(ptr, TYNI_BLOCK, 0);
 	ptr->next = NULL;
-	set_page(ptr, TYNI_BLOCK);
+	set_page(ptr, TYNI_BLOCK, size);
 	return (ptr);
 }
 
-static int				init_tyni_page(void)
+static int				init_tyni_page(size_t nb)
 {
 	t_block *ptr;
 
-	g_mem.size_tyni = g_mem.page;
-	ptr = (t_block *)mmap(NULL, g_mem.page, FLAG_MALLOC, -1, 0);
+	ptr = (t_block *)mmap(NULL, g_mem.page * nb, FLAG_MALLOC, -1, 0);
 	if (ptr == ((void *)-1))
 		return (1);
-	ptr->size = TYNI_BLOCK;
+	g_mem.size_tyni = g_mem.page * nb;
 	ptr->info |= OPT_MAP_HEAD;
 	set_block(ptr, TYNI_BLOCK, 0);
 	ptr->next = NULL;
 	g_mem.m_tyni = ptr;
-	set_page(ptr, TYNI_BLOCK);
+	set_page(ptr, TYNI_BLOCK, nb);
 	return (0);
 }
 
@@ -85,18 +85,25 @@ void					*alloc_tyni(size_t size)
 {
 	t_block *ptr;
 
+
 	ptr = NULL;
 	if (g_mem.size_tyni == 0)
 	{
-		if (init_tyni_page() == 1)
+		if (init_tyni_page(ROUND_UP_PAGE(size * TYNI_BLOCK)) == 1)
 			return (NULL);
 	}
 	if ((g_mem.size_tyni - g_mem.use_tyni) >= TYNI_BLOCK * size)
-		ptr = find_fusion_location(g_mem.m_tyni, size);
+		ptr = find_fusion_location(g_mem.m_tyni, size);// fusion  de block
 	else
-		ptr = add_page();
-	if (ptr != ((void *)-1))
+	{
+		ptr = add_page(ROUND_UP_PAGE(size * TYNI_BLOCK));
+		if (!ptr)
+			return (NULL);
+		ptr = find_fusion_location(g_mem.m_tyni, size);
+	}
+	if (ptr && ptr != ((void *)-1))
 		set_block(ptr, TYNI_BLOCK * size, OPT_FREE);
+
 	pthread_mutex_unlock(&(g_mem.mutex));
-	return ((((ptr != ((void *)-1)) || ptr) ? ptr->data : NULL));
+	return (((ptr && ptr != ((void *)-1)) ? ptr->data : NULL));
 }
