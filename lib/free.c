@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/17 11:44:30 by srabah            #+#    #+#             */
-/*   Updated: 2017/02/18 18:18:44 by srabah           ###   ########.fr       */
+/*   Updated: 2017/02/18 18:35:32 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "malloc.h"
@@ -36,8 +36,10 @@ void	free_splite_block(t_block *ptr, size_t block_size, int type)
 
 void	ft_free(void *ptr)
 {
-	ptr -= OFFSETOFF(t_block, data);
 
+	if (ptr == NULL)
+		return ;
+	ptr -= OFFSETOFF(t_block, data);
 	((t_block *)(ptr))->info ^= OPT_FREE;
 	if (CHECK_BIT(((t_block *)(ptr))->info, OPT_TYNI))
 	{
