@@ -6,12 +6,12 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/17 11:44:30 by srabah            #+#    #+#             */
-/*   Updated: 2017/02/19 15:53:42 by srabah           ###   ########.fr       */
+/*   Updated: 2017/02/20 16:55:26 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "malloc.h"
 
-void	free_splite_block(t_block *ptr, size_t block_size, int type)
+static inline void	free_splite_block(t_block *ptr, size_t block_size, int type)
 {
 	t_block *tmp;
 	t_block *new;
@@ -31,6 +31,23 @@ void	free_splite_block(t_block *ptr, size_t block_size, int type)
 		nb_block--;
 	}
 
+}
+static inline void	check_unmap(t_block *ptr)
+{
+	t_block *tmp;
+	size_t	len;
+
+	len = 0;
+	tmp = ptr;
+	while(tmp && len != g_mem.page)
+	{
+		if (!CHECK_BIT(ptr->info, OPT_FREE))
+			len += ptr->size;
+		else
+			return ;
+		tmp = tmp->next;
+	}
+	printf(GRN"%s\n"RESET , "SUPER PAGE   faire la fonction de getion des unmap");		
 }
 
 void	ft_free(void *ptr)
@@ -55,8 +72,11 @@ void	ft_free(void *ptr)
 	else if (CHECK_BIT(((t_block *)(ptr))->info, OPT_LARGE))
 	{
 		g_mem.use_large -= ((t_block *)(ptr))->size;
+		// gestion du free et du unmap specifique avec buff 
 		//gestion specifique du type large
 	}
-	if (CHECK_BIT(((t_block *)(ptr))->info, OPT_MAP_HEAD))
-		printf(GRN"%s\n"RESET , "SUPER PAGE   faire la fonction de getion des unmap");		
+	if (!CHECK_BIT(((t_block *)(ptr))->info, OPT_LARGE) && CHECK_BIT(((t_block *)(ptr))->info, OPT_MAP_HEAD))
+	{
+		check_unmap(ptr);
+	}
 }

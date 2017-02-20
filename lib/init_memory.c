@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/19 16:00:26 by srabah            #+#    #+#             */
-/*   Updated: 2017/02/20 15:46:46 by srabah           ###   ########.fr       */
+/*   Updated: 2017/02/20 16:43:28 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,9 @@ static inline	void	set_page(t_block *ptr, size_t size_block, int nb, int opt)
 	len = len * nb;
 	tmp = ptr;
 	len--;
-	tmp->info |= opt;
+	set_block(tmp, size_block, opt);
 	while (i < len)
 	{
-		tmp->ptr = tmp->data;
 		new = tmp->ptr + (size_block - SIZE_ST_HEAD);
 		tmp->next = new;
 		set_block(new, size_block, opt);

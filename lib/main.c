@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/15 16:23:41 by srabah            #+#    #+#             */
-/*   Updated: 2017/02/20 16:07:37 by srabah           ###   ########.fr       */
+/*   Updated: 2017/02/20 16:40:33 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "malloc.h"
@@ -25,23 +25,21 @@ void	*ft_malloc(size_t size) // attention au size_t max ====> 184467440737095516
 {
 	size_t	len;
 	size_t	len_small;
-	
+
 	pthread_mutex_lock(&(g_mem.mutex));
-	/// code un repartiteur de charge proportionnel a espace libre dans les maillon
 	if (g_mem.page == 0)
 		g_mem.page = getpagesize();
 	if (!g_mem.size_tyni && !g_mem.size_small)
 		init_memory(100, 100);
 	len = (size <= TYNI_MAX) ? 1 : (ROUND_UP_PAGE(size, TYNI_BLOCK));
 	len_small = (size <= SMALL_MIN) ? 1 : (ROUND_UP_PAGE(size, SMALL_BLOCK));
-	if ( len <= 4)
-		return (alloc_tyni(len)); // rajouter dans size la taille demander en nombre de block taille du block 64 data block 32 penser a la fusion
+	if (len <= 4)
+		return (alloc_tyni(len));
 	else if (len <= 4)
 		return (alloc_small(len_small));
 	else
 		return (alloc_large(size));
 }
-
 
 int main(int argc, char const *argv[])
 {
@@ -64,7 +62,7 @@ int main(int argc, char const *argv[])
 	while(i < 100)
 	{
 		ptr = (char *)ft_malloc(atol(argv[1]));
-		// ft_free(ptr);
+		ft_free(ptr);
 		i++;
 	}
 	if (!ptr)
@@ -123,7 +121,7 @@ int main(int argc, char const *argv[])
 	int j = 0;
 	while(tmp)
 	{
-		printf(RED"pos = [%d]"GRN"addr = [%p]" CYN "size = [%zu]"RESET" info = [%d]\n", j, tmp, tmp->size, tmp->info);
+		printf("TYNI "RED"pos = [%d]"GRN"addr = [%p]" CYN "size = [%zu]"RESET" info = [%d]\n", j, tmp, tmp->size, tmp->info);
 		tmp = tmp->next;
 		j++;
 	}
@@ -132,7 +130,7 @@ int main(int argc, char const *argv[])
 	j = 0;
 	while(tmp)
 	{
-		printf(RED"pos = [%d]"GRN"addr = [%p]" CYN "size = [%zu]"RESET" info = [%d]\n", j, tmp, tmp->size, tmp->info);
+		printf("SMALL "RED"pos = [%d]"GRN"addr = [%p]" CYN "size = [%zu]"RESET" info = [%d]\n", j, tmp, tmp->size, tmp->info);
 		tmp = tmp->next;
 		j++;
 	}
