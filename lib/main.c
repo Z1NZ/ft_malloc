@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/15 16:23:41 by srabah            #+#    #+#             */
-/*   Updated: 2017/02/18 18:27:50 by srabah           ###   ########.fr       */
+/*   Updated: 2017/02/20 16:07:37 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "malloc.h"
@@ -21,23 +21,23 @@
 #include <stdlib.h>
 
 
-	// mmap(void *addr, size_t len, int prot, int flags, int fd, off_t offset);
-#define align8(x) (((((x)-1)>>4)<<4) + 8)
-#define align4(x) (((((x)-1)>>2)<<2) + 4)
-
-
 void	*ft_malloc(size_t size) // attention au size_t max ====> 18446744073709551615
 {
+	size_t	len;
+	size_t	len_small;
+	
 	pthread_mutex_lock(&(g_mem.mutex));
-	/// code un repartiteur de charge proportionnel a espace libre dans les maillon 
-
-
+	/// code un repartiteur de charge proportionnel a espace libre dans les maillon
 	if (g_mem.page == 0)
 		g_mem.page = getpagesize();
-	if (size <= TYNI_MAX)
-		return (alloc_tyni(1)); // rajouter dans size la taille demander en nombre de block taille du block 64 data block 32 penser a la fusion
-	else if (size < SMALL_MIN)
-		return (alloc_small(100));
+	if (!g_mem.size_tyni && !g_mem.size_small)
+		init_memory(100, 100);
+	len = (size <= TYNI_MAX) ? 1 : (ROUND_UP_PAGE(size, TYNI_BLOCK));
+	len_small = (size <= SMALL_MIN) ? 1 : (ROUND_UP_PAGE(size, SMALL_BLOCK));
+	if ( len <= 4)
+		return (alloc_tyni(len)); // rajouter dans size la taille demander en nombre de block taille du block 64 data block 32 penser a la fusion
+	else if (len <= 4)
+		return (alloc_small(len_small));
 	else
 		return (alloc_large(size));
 }
@@ -64,7 +64,7 @@ int main(int argc, char const *argv[])
 	while(i < 100)
 	{
 		ptr = (char *)ft_malloc(atol(argv[1]));
-		ft_free(ptr);
+		// ft_free(ptr);
 		i++;
 	}
 	if (!ptr)
@@ -119,7 +119,7 @@ int main(int argc, char const *argv[])
 
 	t_block *tmp;
 
-	tmp = g_mem.m_small;
+	tmp = g_mem.m_tyni;
 	int j = 0;
 	while(tmp)
 	{
@@ -128,9 +128,18 @@ int main(int argc, char const *argv[])
 		j++;
 	}
 
+	tmp = g_mem.m_small;
+	j = 0;
+	while(tmp)
+	{
+		printf(RED"pos = [%d]"GRN"addr = [%p]" CYN "size = [%zu]"RESET" info = [%d]\n", j, tmp, tmp->size, tmp->info);
+		tmp = tmp->next;
+		j++;
+	}
 	printf("\ng_Memory tyni -> (%zu / %zu)\n", g_mem.use_tyni, g_mem.size_tyni);
 	printf("\ng_Memory small -> (%zu / %zu)\n", g_mem.use_small, g_mem.size_small);
 	printf("\ng_Memory large -> (%zu / %zu)\n", g_mem.use_large, g_mem.size_large);
+	printf("%p\n", ptr);
 
 	return 0;
 }

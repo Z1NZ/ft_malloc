@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/15 15:33:47 by srabah            #+#    #+#             */
-/*   Updated: 2017/02/18 17:36:48 by srabah           ###   ########.fr       */
+/*   Updated: 2017/02/19 16:52:40 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,14 +90,14 @@ void					*alloc_tyni(size_t size)
 	ptr = NULL;
 	if (g_mem.size_tyni == 0)
 	{
-		if (init_tyni_page(ROUND_UP_PAGE(size * TYNI_BLOCK)) == 1)
+		if (init_tyni_page(ROUND_UP_PAGE(size * TYNI_BLOCK, g_mem.page)) == 1)
 			return (NULL);
 	}
 	if ((g_mem.size_tyni - g_mem.use_tyni) >= TYNI_BLOCK * size)
 		ptr = find_fusion_location(g_mem.m_tyni, size);// fusion  de block
 	else
 	{
-		ptr = add_page(ROUND_UP_PAGE(size * TYNI_BLOCK));
+		ptr = add_page(ROUND_UP_PAGE(size * TYNI_BLOCK, g_mem.page));
 		if (!ptr)
 			return (NULL);
 		ptr = find_fusion_location(g_mem.m_tyni, size);

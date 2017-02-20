@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/15 16:21:17 by srabah            #+#    #+#             */
-/*   Updated: 2017/02/18 17:37:09 by srabah           ###   ########.fr       */
+/*   Updated: 2017/02/19 16:47:35 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,14 +90,14 @@ void				*alloc_small(size_t size)
 	ptr = NULL;
 	if (g_mem.size_small == 0)
 	{
-		if (init_small_page(ROUND_UP_PAGE(size * SMALL_BLOCK)) == 1)
+		if (init_small_page(ROUND_UP_PAGE(size * SMALL_BLOCK, g_mem.page)) == 1)
 			return (NULL);
 	}
 	if ((g_mem.size_small - g_mem.use_small) >= SMALL_BLOCK * size)
 		ptr = find_fusion_location(g_mem.m_small, size);
 	else
 	{
-		ptr = add_page(ROUND_UP_PAGE(size * SMALL_BLOCK));
+		ptr = add_page(ROUND_UP_PAGE(size * SMALL_BLOCK, g_mem.page));
 		if (!ptr)
 			return (NULL);
 		ptr = find_fusion_location(g_mem.m_small, size);

@@ -6,12 +6,11 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/17 11:44:30 by srabah            #+#    #+#             */
-/*   Updated: 2017/02/18 18:35:32 by srabah           ###   ########.fr       */
+/*   Updated: 2017/02/19 15:53:42 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "malloc.h"
 
-/// add fonction super spliter
 void	free_splite_block(t_block *ptr, size_t block_size, int type)
 {
 	t_block *tmp;
