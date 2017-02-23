@@ -6,14 +6,15 @@
 #    By: srabah <srabah@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/02/11 18:45:23 by srabah            #+#    #+#              #
-#    Updated: 2017/02/20 17:05:49 by srabah           ###   ########.fr        #
+#    Updated: 2017/02/21 15:50:57 by srabah           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 #	Library output
 NAME = malloc
 
 #	GCC flags
-CFLAGS = -Wall -Wextra -Werror -g -Fsanitize=all
+CFLAGS = -Wall -Wextra -Werror 
+# -g -Weverything
 
 #	Includes directories
 INC_TR = includes

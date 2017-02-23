@@ -6,13 +6,13 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/14 08:44:38 by srabah            #+#    #+#             */
-/*   Updated: 2017/02/18 18:23:38 by srabah           ###   ########.fr       */
+/*   Updated: 2017/02/21 17:06:51 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc.h"
 
-t_block	*init_large(size_t size)
+static t_block	*init_large(size_t size)
 {
 	t_block *ptr;
 
@@ -31,7 +31,7 @@ t_block	*init_large(size_t size)
 	return(ptr);
 }
 
-t_block	*find_large_space(size_t size)
+static t_block	*find_large_space(size_t size)
 {
 	t_block	*ptr;
 	t_block *tmp;
@@ -52,12 +52,14 @@ t_block	*find_large_space(size_t size)
 	return (tmp);
 }
 
-t_block	*add_large_list(size)
+static t_block	*add_large_list(size_t size)
 {
 	t_block	*ptr;
 	t_block	*tmp;
 
 	ptr = g_mem.m_large;
+	if (!ptr)
+		return(NULL);
 	while(ptr->next)
 		ptr = ptr->next;
 	tmp = (t_block *)mmap(NULL, (size + SIZE_ST_HEAD), FLAG_MALLOC, -1, 0);

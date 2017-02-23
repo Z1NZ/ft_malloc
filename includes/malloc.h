@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/15 16:25:37 by srabah            #+#    #+#             */
-/*   Updated: 2017/02/20 15:53:11 by srabah           ###   ########.fr       */
+/*   Updated: 2017/02/21 16:07:30 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@
 typedef struct			s_block
 {
 	size_t				size;/*la taille du bloc alloué*/
+	int					pad;
 	int					info;/*indicateur de disponibilité du bloc et les information complementaire*/ 
 	struct s_block		*next;/*les pointeurs sur les méta-données des blocs suivants et précédants;*/
 	void				*ptr;/*le pointeur sur les données, pour le contrôleur d'erreur de free*/
@@ -59,7 +60,8 @@ typedef struct			s_block
 typedef struct			s_mem
 {
 	pthread_mutex_t		mutex;/*variable pour la getion des mutex*/
-	size_t				page;/*taille d'une page*/
+	int					page;/*taille d'une page*/
+	int					pad;
 	size_t				size_tyni;/*taille total de la memoire donner a tyni*/
 	size_t				use_tyni;/*taille total uttilise tyni*/
 	t_block				*m_tyni;/*pointeur sur la list chainneé tyni*/

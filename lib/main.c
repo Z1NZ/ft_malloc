@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/15 16:23:41 by srabah            #+#    #+#             */
-/*   Updated: 2017/02/20 16:40:33 by srabah           ###   ########.fr       */
+/*   Updated: 2017/02/21 17:09:12 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "malloc.h"
@@ -52,21 +52,24 @@ int main(int argc, char const *argv[])
 	ptr = NULL;
 	ptr2 = NULL;
 	printf("taille du block ====		[%zu]		====\n", sizeof(t_block));
-	if (argc == 2)
-		ptr = (char *)ft_malloc(atol(argv[1]));
-	if (!ptr)
-		return(1);
-	ft_free(ptr);
-	printf("------addr ptr  [%p]\n", ptr);
-
+	if (argc != 2)
+		return (1);
+	ptr = (char *)ft_malloc(atol(argv[1]));
+	ft_free(ptr); 
+	printf("%lu\n", atol(argv[1]));
 	while(i < 100)
 	{
+		printf("%s\n", "SIII");
 		ptr = (char *)ft_malloc(atol(argv[1]));
+		printf("[%d] === > %p\n", i, ptr);
 		ft_free(ptr);
+		ptr = NULL;
+		printf("%s\n", ";SIPPPPP");
+	
 		i++;
 	}
-	if (!ptr)
-		return(1);
+	// if (!ptr)
+		// return(1);
 	// while(i <= atoi(argv[1]))
 	// {
 	// 	ptr[i] = 'a';
@@ -114,7 +117,6 @@ int main(int argc, char const *argv[])
 	// printf("[%p]", toto);
 	// toto = malloc(0);
 	// printf("[%p]", toto);
-
 	t_block *tmp;
 
 	tmp = g_mem.m_tyni;
@@ -131,6 +133,15 @@ int main(int argc, char const *argv[])
 	while(tmp)
 	{
 		printf("SMALL "RED"pos = [%d]"GRN"addr = [%p]" CYN "size = [%zu]"RESET" info = [%d]\n", j, tmp, tmp->size, tmp->info);
+		tmp = tmp->next;
+		j++;
+	}
+
+	tmp = g_mem.m_large;
+	j = 0;
+	while(tmp)
+	{
+		printf("LARGE "RED"pos = [%d]"GRN"addr = [%p]" CYN "size = [%zu]"RESET" info = [%d]\n", j, tmp, tmp->size, tmp->info);
 		tmp = tmp->next;
 		j++;
 	}
