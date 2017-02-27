@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/15 16:25:37 by srabah            #+#    #+#             */
-/*   Updated: 2017/02/21 16:07:30 by srabah           ###   ########.fr       */
+/*   Updated: 2017/02/27 07:51:44 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,11 +80,14 @@ void					init_memory(size_t block_tyni, size_t block_small);
 void					*alloc_large(size_t size);
 void					*alloc_tyni(size_t size);
 void					*alloc_small(size_t size);
+void					*malloc(size_t size);
+void					*calloc(size_t count, size_t size);
+void    				*realloc(void *, size_t);
 
 /*
 ** free
 */
-void 					ft_free(void *ptr);
+void 					free(void *ptr);
 /*
 ** TOOLS
 */

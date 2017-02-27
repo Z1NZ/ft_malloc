@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/15 15:33:47 by srabah            #+#    #+#             */
-/*   Updated: 2017/02/19 16:52:40 by srabah           ###   ########.fr       */
+/*   Updated: 2017/02/27 08:51:52 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ void					*alloc_tyni(size_t size)
 {
 	t_block *ptr;
 
-
+	dprintf(2, "%s\n", "MALLOC TYNI");
 	ptr = NULL;
 	if (g_mem.size_tyni == 0)
 	{
@@ -105,5 +105,18 @@ void					*alloc_tyni(size_t size)
 	if (ptr && ptr != ((void *)-1))
 		set_block(ptr, TYNI_BLOCK * size, OPT_FREE);
 	pthread_mutex_unlock(&(g_mem.mutex));
+	dprintf(2, "PTR = %p	"   RED     "ptr->info = %d	 ptr->size = %lu\n"RESET, ptr, ptr->info, ptr->size);
+
+	t_block *tmp;
+
+	tmp = g_mem.m_tyni;
+	int j = 0;
+	while(j < 5)
+	{
+		printf("TYNI "RED"pos = [%d]"GRN"addr = [%p]" CYN "size = [%zu]"RESET" info = [%d]\n", j, tmp, tmp->size, tmp->info);
+		tmp = tmp->next;
+		j++;
+	}
+
 	return (((ptr && ptr != ((void *)-1)) ? ptr->data : NULL));
 }

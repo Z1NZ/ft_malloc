@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/14 08:44:38 by srabah            #+#    #+#             */
-/*   Updated: 2017/02/21 17:06:51 by srabah           ###   ########.fr       */
+/*   Updated: 2017/02/27 08:54:18 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,16 @@ void	*alloc_large(size_t size)
 	}
 	if (!ptr)
 		ptr = add_large_list(size);
+	t_block *tmp;
+
+	tmp = g_mem.m_large;
+	int j = 0;
+	while(j < 5)
+	{
+		dprintf(2, "large "RED"pos = [%d]"GRN"addr = [%p]" CYN "size = [%zu]"RESET" info = [%d]\n", j, tmp, tmp->size, tmp->info);
+		tmp = tmp->next;
+		j++;
+	}
 	pthread_mutex_unlock(&(g_mem.mutex));
 	return (((ptr && ptr != ((void *)-1)) ? ptr->data : NULL));
 }

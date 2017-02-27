@@ -6,11 +6,11 @@
 #    By: srabah <srabah@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/02/11 18:45:23 by srabah            #+#    #+#              #
-#    Updated: 2017/02/21 15:50:57 by srabah           ###   ########.fr        #
+#    Updated: 2017/02/27 05:57:08 by srabah           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 #	Library output
-NAME = malloc
+NAME = libft_malloc.so
 
 #	GCC flags
 CFLAGS = -Wall -Wextra -Werror 
@@ -21,19 +21,19 @@ INC_TR = includes
 INCLUDES += $(addprefix -iquote , $(INC_TR))
 
 #	Sources
-RT_SOURCES = $(shell find lib | grep "\.c$$" | sed "s/\.c$$//g")
-SRCS = $(addsuffix .c, $(RT_SOURCES))
+MALLOC_SOURCES = $(shell find lib | grep "\.c$$" | sed "s/\.c$$//g")
+SRCS = $(addsuffix .c, $(MALLOC_SOURCES))
 OBJS = $(SRCS:.c=.o)
 
 all: $(NAME)
 
 $(NAME): $(OBJS)
 	@echo ">>>>> Génération de malloc"
-	@gcc $(OBJS) -o $(NAME)
+	@$(CC) $(OBJS) -shared -o $(NAME)
 	@echo "Terminée"
 
 # To obtain object files
-%.o: %.c
+%.o: %.c 
 	@$(CC) -c $(CFLAGS) $(INCLUDES) $< -o $@
 
 # To remove generated files
@@ -44,12 +44,6 @@ clean:
 fclean: clean
 	@echo "RM\tprojet ($(NAME))"
 	@$(RM) $(NAME)
-
-lftclean:
-	make -C libft clean
-
-lftfclean:
-	make -C libft fclean
 
 re: fclean all
 

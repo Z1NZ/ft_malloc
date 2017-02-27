@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/15 16:21:17 by srabah            #+#    #+#             */
-/*   Updated: 2017/02/19 16:47:35 by srabah           ###   ########.fr       */
+/*   Updated: 2017/02/27 08:47:01 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,8 @@ static int			init_small_page(size_t nb)
 
 void				*alloc_small(size_t size)
 {
+
+	dprintf(2, "%s\n", "MALLOC SMALL");
 	t_block *ptr;
 
 	ptr = NULL;
