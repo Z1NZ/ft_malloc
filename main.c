@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/15 16:23:41 by srabah            #+#    #+#             */
-/*   Updated: 2017/02/27 08:50:34 by srabah           ###   ########.fr       */
+/*   Updated: 2017/03/01 01:41:00 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ typedef struct			s_mem
 int main(int argc, char const *argv[])
 {
 
+	dprintf(2, "TOTOTO");
 	char	*ptr;
 	char	*ptr2;
 	int		i;
@@ -102,7 +103,7 @@ int main(int argc, char const *argv[])
 		printf("%s\n", "SIII");
 		ptr = (char *)malloc(atol(argv[1]));
 		printf("[%d] === > %p\n", i, ptr);
-		free(ptr);
+		// free(ptr);
 		ptr = NULL;
 		printf("%s\n", ";SIPPPPP");
 	

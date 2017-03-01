@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/14 08:44:38 by srabah            #+#    #+#             */
-/*   Updated: 2017/02/27 08:54:18 by srabah           ###   ########.fr       */
+/*   Updated: 2017/03/01 03:44:42 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ void	*alloc_large(size_t size)
 {
 	t_block *ptr;
 
+	dprintf(2, RED "LARGE  __ Size %lu\n" RESET, size);
 	ptr = NULL;
 	if (g_mem.size_large == 0)
 		ptr = init_large(size);
@@ -94,16 +95,17 @@ void	*alloc_large(size_t size)
 	}
 	if (!ptr)
 		ptr = add_large_list(size);
-	t_block *tmp;
+	// t_block *tmp;
 
-	tmp = g_mem.m_large;
-	int j = 0;
-	while(j < 5)
-	{
-		dprintf(2, "large "RED"pos = [%d]"GRN"addr = [%p]" CYN "size = [%zu]"RESET" info = [%d]\n", j, tmp, tmp->size, tmp->info);
-		tmp = tmp->next;
-		j++;
-	}
+	// tmp = g_mem.m_large;
+	// int j = 0;
+	// while(tmp && j < 5)
+	// {
+	// 	dprintf(2, "large "RED"pos = [%d]"GRN"addr = [%p]" CYN "size = [%zu]"RESET" info = [%d]\n", j, tmp, tmp->size, tmp->info);
+	// 	tmp = tmp->next;
+	// 	j++;
+	// }
 	pthread_mutex_unlock(&(g_mem.mutex));
+		dprintf(2, RED "LARGE  __ FIN\n" RESET);
 	return (((ptr && ptr != ((void *)-1)) ? ptr->data : NULL));
 }

@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/15 16:21:17 by srabah            #+#    #+#             */
-/*   Updated: 2017/02/27 08:47:01 by srabah           ###   ########.fr       */
+/*   Updated: 2017/03/01 03:29:05 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ static int			init_small_page(size_t nb)
 void				*alloc_small(size_t size)
 {
 
-	dprintf(2, "%s\n", "MALLOC SMALL");
+	dprintf(2, "%s %lu\n", "MALLOC SMALL  SIZE =", size);
 	t_block *ptr;
 
 	ptr = NULL;
@@ -97,7 +97,7 @@ void				*alloc_small(size_t size)
 	}
 	if ((g_mem.size_small - g_mem.use_small) >= SMALL_BLOCK * size)
 		ptr = find_fusion_location(g_mem.m_small, size);
-	else
+	if (!ptr)
 	{
 		ptr = add_page(ROUND_UP_PAGE(size * SMALL_BLOCK, g_mem.page));
 		if (!ptr)
@@ -106,6 +106,7 @@ void				*alloc_small(size_t size)
 	}
 	if (ptr && ptr != ((void *)-1))
 		set_block(ptr, SMALL_BLOCK * size, OPT_FREE);
+	dprintf(2, "%s\n", "MALLOC SMALL FIN");
 	pthread_mutex_unlock(&(g_mem.mutex));
 	return (((ptr && ptr != ((void *)-1)) ? ptr->data : NULL));
 }

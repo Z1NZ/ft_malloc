@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/17 11:44:30 by srabah            #+#    #+#             */
-/*   Updated: 2017/02/27 08:55:03 by srabah           ###   ########.fr       */
+/*   Updated: 2017/03/01 03:38:23 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "malloc.h"
@@ -58,16 +58,13 @@ static inline void	unmap_block(t_block **head, t_block *ptr)
 	{
 		*head = ptr->next;
 		munmap((caddr_t *)ptr, ptr->size);
-		dprintf(2, "[[[[[%p]]]]]] %p\n", *head, g_mem.m_large);
 		return ;
 	}
-
 	tmp = *head;
 	while(tmp)
 	{
 		if (tmp->next == ptr)
 		{
-			dprintf(2, "%s\n", "KAMEHAMEHHAAAA!");
 			tmp->next = ptr->next;
 			munmap((caddr_t *)ptr, ptr->size);
 			break;
@@ -75,14 +72,41 @@ static inline void	unmap_block(t_block **head, t_block *ptr)
 		tmp = tmp->next;
 	}
 }
+static inline int	check_addr(void *ptr)
+{
+	t_block *tmp;
+	int i;
+
+	i = 0;
+	ptr -= OFFSETOFF(t_block, data);
+
+	tmp = g_mem.m_tyni;
+	loop:
+	while(tmp)
+	{
+		if (tmp == ptr)
+			return (1);
+		tmp = tmp->next;
+	}
+	++i;
+	if (i == 1)
+		tmp = g_mem.m_small;
+	else if (i == 2)
+		tmp = g_mem.m_large;
+	else
+		return (0);
+	goto loop;
+}
 
 void	free(void *ptr)
 {
 	pthread_mutex_lock(&(g_mem.mutex));
-
-	dprintf(2, "FREE %p    = info %d\n\n", ((t_block *)(ptr)), ((t_block *)(ptr))->info);
-	if (ptr == NULL)
+	dprintf(2, "free START === %p\n", ptr);
+	if (ptr == NULL || !check_addr(ptr))
+	{
+		pthread_mutex_unlock(&(g_mem.mutex));
 		return ;
+	}
 	ptr -= OFFSETOFF(t_block, data);
 	((t_block *)(ptr))->info ^= OPT_FREE;
 	if (CHECK_BIT(((t_block *)(ptr))->info, OPT_TYNI))
@@ -102,6 +126,7 @@ void	free(void *ptr)
 		g_mem.use_large -= ((t_block *)(ptr))->size;
 		g_mem.size_large -= ((t_block *)(ptr))->size;
 		unmap_block(&g_mem.m_large, ptr);
+		pthread_mutex_unlock(&(g_mem.mutex));
 		return	;
 	}
 	if (!CHECK_BIT(((t_block *)(ptr))->info, OPT_LARGE) && CHECK_BIT(((t_block *)(ptr))->info, OPT_MAP_HEAD))
@@ -109,5 +134,6 @@ void	free(void *ptr)
 
 		dprintf(2, "%s\n", "CA------------FEBABE");
 	}
+	dprintf(2, "FREE FIN");
 	pthread_mutex_unlock(&(g_mem.mutex));
 }

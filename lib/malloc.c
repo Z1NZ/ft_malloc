@@ -6,26 +6,78 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/15 16:23:41 by srabah            #+#    #+#             */
-/*   Updated: 2017/02/27 08:57:30 by srabah           ###   ########.fr       */
+/*   Updated: 2017/03/01 03:26:41 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "malloc.h"
 
+
+
+static inline void	set_zero_block(void *ptr)
+{
+	size_t len;
+	size_t i;
+
+	i = 0;
+	ptr -= OFFSETOFF(t_block, data);
+	len = ((t_block *)(ptr))->size - SIZE_ST_HEAD;
+	// dprintf(2, "set_zero_block %p %lu", ptr, len);
+	while(i < len)
+	{
+		((t_block *)(ptr))->data[i++] = 0;
+	}
+}
+
 void	*calloc(size_t count, size_t size)
 {
-	(void)count;
-	(void)size;
-	dprintf(2, "%s\n", "SUPER");
-	return(NULL);
+	void *ptr;
+
+	dprintf(2, "CALLOC count = %zu size %zu",count, size);
+	if (!count || !size)
+		return(NULL);
+	ptr = malloc((count * size));
+	if (ptr)
+		set_zero_block(ptr);
+	dprintf(2, "CALLOC FIN");
+	return(ptr);
 }
 
 
 
-void	*realloc(void *count, size_t size)
+void	*realloc(void *ptr, size_t size)
 {
-	(void)count;
-	(void)size;
+	void	*tmp;
+	size_t	len;
+	size_t	i;
+
 	dprintf(2, "%s\n", "SUPER REALLOC");
+	i = 0;
+	if (!ptr)
+		return(malloc(size));
+	else if (ptr && size == 0)
+	{
+		free(ptr);
+		return(NULL);
+	}
+	else
+	{
+		ptr -= OFFSETOFF(t_block, data);
+		len = ((t_block *)(ptr))->size - SIZE_ST_HEAD;
+		if (len >= size)
+			return(((t_block *)(ptr))->data);
+		else
+		{
+			tmp = (void *)malloc(size);
+			tmp -= OFFSETOFF(t_block, data);
+			while(i <= len)
+			{
+				((t_block *)(tmp))->data[i] = ((t_block *)(ptr))->data[i];
+				++i;
+			}
+			free(((t_block *)(ptr))->data);
+			return(((t_block *)(tmp))->data);
+		}
+	}
 	return(NULL);
 }
 
@@ -34,15 +86,15 @@ void	*malloc(size_t size) // attention au size_t max ====> 18446744073709551615
 	size_t	len;
 	size_t	len_small;
 
-	len = 5;
-	len_small = 5;
 	pthread_mutex_lock(&(g_mem.mutex));
+	dprintf(2, "%s == size => %zu\n", "SUPER MALLOC", size);
 	if (g_mem.page == 0)
 		g_mem.page = getpagesize();
 	if (!g_mem.size_tyni && !g_mem.size_small)
 		init_memory(100, 100);
-	len = (size <= TYNI_MAX) ? 1 : (ROUND_UP_PAGE(size, TYNI_BLOCK));
-	len_small = (size <= SMALL_MIN) ? 1 : (ROUND_UP_PAGE(size, SMALL_BLOCK));
+	len = (size <= TYNI_MAX) ? 1 : (ROUND_UP_PAGE(size, TYNI_MAX));
+	len_small = (size <= SMALL_MIN) ? 1 : (ROUND_UP_PAGE(size, SMALL_MIN));
+	dprintf(2, "%s\n", "SUPER MALLOC FIN ");
 	if (len <= 4)
 		return (alloc_tyni(len));
 	else if (len_small <= 4)
