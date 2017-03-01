@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/14 08:44:38 by srabah            #+#    #+#             */
-/*   Updated: 2017/03/01 03:44:42 by srabah           ###   ########.fr       */
+/*   Updated: 2017/03/01 21:41:36 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,9 @@ void	*alloc_large(size_t size)
 {
 	t_block *ptr;
 
-	dprintf(2, RED "LARGE  __ Size %lu\n" RESET, size);
+	// dprintf(2, RED "LARGE  __ Size %lu\n" RESET, size);
+	write(2, "SUPER_LARGE\n", 12);
+
 	ptr = NULL;
 	if (g_mem.size_large == 0)
 		ptr = init_large(size);
@@ -105,7 +107,9 @@ void	*alloc_large(size_t size)
 	// 	tmp = tmp->next;
 	// 	j++;
 	// }
+	write(2, "SUPER_FIN\n", 9);
+
 	pthread_mutex_unlock(&(g_mem.mutex));
-		dprintf(2, RED "LARGE  __ FIN\n" RESET);
+		// dprintf(2, RED "LARGE  __ FIN\n" RESET);
 	return (((ptr && ptr != ((void *)-1)) ? ptr->data : NULL));
 }

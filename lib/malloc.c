@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/15 16:23:41 by srabah            #+#    #+#             */
-/*   Updated: 2017/03/01 04:25:28 by srabah           ###   ########.fr       */
+/*   Updated: 2017/03/01 21:40:09 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "malloc.h"
@@ -21,7 +21,7 @@ static inline void	set_zero_block(void *ptr)
 	i = 0;
 	ptr -= OFFSETOFF(t_block, data);
 	len = ((t_block *)(ptr))->size - SIZE_ST_HEAD;
-	dprintf(2, "set_zero_block %p %lu", ptr, len);
+	// dprintf(2, "set_zero_block %p %lu", ptr, len);
 	while(i < len)
 	{
 		((t_block *)(ptr))->data[i] = 0;
@@ -33,13 +33,13 @@ void	*calloc(size_t count, size_t size)
 {
 	void *ptr;
 
-	dprintf(2, "CALLOC count = %zu size %zu",count, size);
+	// dprintf(2, "CALLOC count = %zu size %zu",count, size);
 	if (!count || !size)
 		return(NULL);
 	ptr = malloc((count * size));
 	if (ptr)
 		set_zero_block(ptr);
-	dprintf(2, "CALLOC FIN");
+	// dprintf(2, "CALLOC FIN");
 	return(ptr);
 }
 
@@ -51,7 +51,7 @@ void	*realloc(void *ptr, size_t size)
 	size_t	len;
 	size_t	i;
 
-	dprintf(2, "%s\n", "SUPER REALLOC");
+	// dprintf(2, "%s\n", "SUPER REALLOC");
 	i = 0;
 	if (!ptr)
 		return(malloc(size));
@@ -88,14 +88,13 @@ void	*malloc(size_t size) // attention au size_t max ====> 18446744073709551615
 	size_t	len_small;
 
 	pthread_mutex_lock(&(g_mem.mutex));
-	dprintf(2, "%s == size => %zu\n", "SUPER MALLOC", size);
 	if (g_mem.page == 0)
 		g_mem.page = getpagesize();
 	if (!g_mem.size_tyni && !g_mem.size_small)
 		init_memory(100, 100);
 	len = (size <= TYNI_MAX) ? 1 : (ROUND_UP_PAGE(size, TYNI_MAX));
 	len_small = (size <= SMALL_MIN) ? 1 : (ROUND_UP_PAGE(size, SMALL_MIN));
-	dprintf(2, "%s\n", "SUPER MALLOC FIN ");
+	write(2, "SUPER\n", 6);
 	if (len <= 4)
 		return (alloc_tyni(len));
 	else if (len_small <= 4)

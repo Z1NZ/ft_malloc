@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/15 16:26:24 by srabah            #+#    #+#             */
-/*   Updated: 2017/03/01 03:36:22 by srabah           ###   ########.fr       */
+/*   Updated: 2017/03/01 22:48:56 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,24 +27,29 @@ void	*find_fusion_location(t_block *block, size_t size)
 
 	ptr = block;
 	tmp = NULL;
-	dprintf(2, "FUSION  size = %lu\n", size);
+	// dprintf(2, "FUSION  size = %lu\n", size);
+	write(2, "fusion\n", 7);
 	while (ptr)
 	{
 		i = 0;
 		tmp = ptr;
-		while (tmp && (!CHECK_BIT(tmp->info, OPT_FREE))) /// verifer que il ny a pas de tete page entre les fusion 
+		while (tmp && (!CHECK_BIT(tmp->info, OPT_FREE)) && (!CHECK_BIT(tmp->info, OPT_MAP_HEAD)))
 		{
 			i++;
 			if (i == size)
 			{
-				dprintf(2, "FUSION  AVANT LE RETURN PTR = %p PTR NEXT = %p\n"   RED     "ptr->info = %d	 ptr->size = %lu size=%lu\n"RESET, tmp,tmp->next, ptr->info, tmp->size, size);
+
+				write(2, "SISI\n", 5);
+				// dprintf(2, "FUSION  AVANT LE RETURN PTR = %p PTR NEXT = %p\n"   RED     "ptr->info = %d	 ptr->size = %lu size=%lu\n"RESET, tmp,tmp->next, ptr->info, tmp->size, size);
 				ptr->next = tmp->next;
+				write(2, "return\n", 7);
 				return (ptr);
 			}
 			tmp = tmp->next;
 		}
 		ptr = ptr->next;
 	}
-	dprintf(2, "Fin de la fusion");
+	write(2, "fusion NULL\n", 12);
+	// dprintf(2, "Fin de la fusion");
 	return (NULL);
 }

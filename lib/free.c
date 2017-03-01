@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/17 11:44:30 by srabah            #+#    #+#             */
-/*   Updated: 2017/03/01 03:38:23 by srabah           ###   ########.fr       */
+/*   Updated: 2017/03/01 21:39:52 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "malloc.h"
@@ -101,7 +101,7 @@ static inline int	check_addr(void *ptr)
 void	free(void *ptr)
 {
 	pthread_mutex_lock(&(g_mem.mutex));
-	dprintf(2, "free START === %p\n", ptr);
+	// dprintf(2, "free START === %p\n", ptr);
 	if (ptr == NULL || !check_addr(ptr))
 	{
 		pthread_mutex_unlock(&(g_mem.mutex));
@@ -129,11 +129,11 @@ void	free(void *ptr)
 		pthread_mutex_unlock(&(g_mem.mutex));
 		return	;
 	}
-	if (!CHECK_BIT(((t_block *)(ptr))->info, OPT_LARGE) && CHECK_BIT(((t_block *)(ptr))->info, OPT_MAP_HEAD))
-	{
+	// if (!CHECK_BIT(((t_block *)(ptr))->info, OPT_LARGE) && CHECK_BIT(((t_block *)(ptr))->info, OPT_MAP_HEAD))
+	// {
 
-		dprintf(2, "%s\n", "CA------------FEBABE");
-	}
-	dprintf(2, "FREE FIN");
+	// 	dprintf(2, "%s\n", "CA------------FEBABE");
+	// }
+	// dprintf(2, "FREE FIN");
 	pthread_mutex_unlock(&(g_mem.mutex));
 }

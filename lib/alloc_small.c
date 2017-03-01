@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/15 16:21:17 by srabah            #+#    #+#             */
-/*   Updated: 2017/03/01 04:12:45 by srabah           ###   ########.fr       */
+/*   Updated: 2017/03/01 21:51:26 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ static void			*add_page(size_t size)
 	t_block		*ptr;
 	t_block		*tmp;
 
+	write(2, "add_page\n", 9);
 	ptr = (t_block *)mmap(NULL, (g_mem.page * size), FLAG_MALLOC, -1, 0);
 	if (ptr == ((void *)-1))
 		return (NULL);
@@ -86,7 +87,8 @@ static int			init_small_page(size_t nb)
 void				*alloc_small(size_t size)
 {
 
-	dprintf(2, "%s %lu\n", "MALLOC SMALL  SIZE =", size);
+	// dprintf(2, "%s %lu\n", "MALLOC SMALL  SIZE =", size);
+	write(2, "SUPER_SMALL\n", 12);
 	t_block *ptr;
 
 	ptr = NULL;
@@ -106,7 +108,8 @@ void				*alloc_small(size_t size)
 	}
 	if (ptr && ptr != ((void *)-1))
 		set_block(ptr, SMALL_BLOCK * size, OPT_FREE);
-	dprintf(2, "%s\n", "MALLOC SMALL FIN");
+	// dprintf(2, "%s\n", "MALLOC SMALL FIN");
+	write(2, "SUPER_SMALL_fin\n", 16);
 	pthread_mutex_unlock(&(g_mem.mutex));
 	return (((ptr && ptr != ((void *)-1)) ? ptr->data : NULL));
 }
