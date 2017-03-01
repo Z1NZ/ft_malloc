@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/15 16:23:41 by srabah            #+#    #+#             */
-/*   Updated: 2017/03/01 03:26:41 by srabah           ###   ########.fr       */
+/*   Updated: 2017/03/01 04:25:28 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "malloc.h"
@@ -21,10 +21,11 @@ static inline void	set_zero_block(void *ptr)
 	i = 0;
 	ptr -= OFFSETOFF(t_block, data);
 	len = ((t_block *)(ptr))->size - SIZE_ST_HEAD;
-	// dprintf(2, "set_zero_block %p %lu", ptr, len);
+	dprintf(2, "set_zero_block %p %lu", ptr, len);
 	while(i < len)
 	{
-		((t_block *)(ptr))->data[i++] = 0;
+		((t_block *)(ptr))->data[i] = 0;
+		i++;
 	}
 }
 
