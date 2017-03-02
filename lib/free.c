@@ -108,7 +108,6 @@ void	free(void *ptr)
 	}
 
 	ptr -= OFFSETOFF(t_block, data);
-	write(2,((t_block *)(ptr))->data, ((t_block *)(ptr))->size);
 	((t_block *)(ptr))->info ^= OPT_FREE;
 	if (CHECK_BIT(((t_block *)(ptr))->info, OPT_TYNI))
 	{
