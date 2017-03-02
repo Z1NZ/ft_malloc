@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/14 08:44:38 by srabah            #+#    #+#             */
-/*   Updated: 2017/03/01 21:41:36 by srabah           ###   ########.fr       */
+/*   Updated: 2017/03/02 03:03:41 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,9 +82,7 @@ void	*alloc_large(size_t size)
 {
 	t_block *ptr;
 
-	// dprintf(2, RED "LARGE  __ Size %lu\n" RESET, size);
-	write(2, "SUPER_LARGE\n", 12);
-
+	// write(2, "SUPER_LARGE\n", 12);
 	ptr = NULL;
 	if (g_mem.size_large == 0)
 		ptr = init_large(size);
@@ -97,19 +95,7 @@ void	*alloc_large(size_t size)
 	}
 	if (!ptr)
 		ptr = add_large_list(size);
-	// t_block *tmp;
-
-	// tmp = g_mem.m_large;
-	// int j = 0;
-	// while(tmp && j < 5)
-	// {
-	// 	dprintf(2, "large "RED"pos = [%d]"GRN"addr = [%p]" CYN "size = [%zu]"RESET" info = [%d]\n", j, tmp, tmp->size, tmp->info);
-	// 	tmp = tmp->next;
-	// 	j++;
-	// }
-	write(2, "SUPER_FIN\n", 9);
-
+	// write(2, "SUPER_FIN\n", 10);
 	pthread_mutex_unlock(&(g_mem.mutex));
-		// dprintf(2, RED "LARGE  __ FIN\n" RESET);
 	return (((ptr && ptr != ((void *)-1)) ? ptr->data : NULL));
 }

@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/15 15:33:47 by srabah            #+#    #+#             */
-/*   Updated: 2017/03/01 22:55:58 by srabah           ###   ########.fr       */
+/*   Updated: 2017/03/02 03:04:21 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ static void				*add_page(size_t size)
 	t_block		*tmp;
 
 
-	write(2, "add_page\n", 9);
 	ptr = (t_block *)mmap(NULL, (g_mem.page * size), FLAG_MALLOC, -1, 0);
 	if (ptr == ((void *)-1))
 		return (NULL);
@@ -89,8 +88,7 @@ void					*alloc_tyni(size_t size)
 	t_block *ptr;
 
 	ptr = NULL;
-	write(2, "SUPER_TYNI\n", 11);
-	// dprintf(2, "%s %lu\n", "MALLOC TYNI  SIZE =", size);
+	// write(2, "t\n", 2);
 	if (g_mem.size_tyni == 0)
 	{
 		if (init_tyni_page(ROUND_UP_PAGE(size * TYNI_BLOCK, g_mem.page)) == 1)
@@ -108,20 +106,5 @@ void					*alloc_tyni(size_t size)
 	if (ptr && ptr != ((void *)-1))
 		set_block(ptr, TYNI_BLOCK * size, OPT_FREE);
 	pthread_mutex_unlock(&(g_mem.mutex));
-	t_block *tmp;
-
-	tmp = g_mem.m_tyni;
-	// int j = 0;
-	write(2, "je ne comprend pas\n", 19);
-	// while(tmp)
-	// {
-	// 	write(2, "t-", 2);
-		// dprintf(2, "TYNI "RED"pos = [%d]"GRN"addr = [%p]" CYN "size = [%zu]"RESET" info = [%d]\n", j, tmp, tmp->size, tmp->info);
-		// tmp = tmp->next;
-		// j++;
-	// }
-		// dprintf(2, "TYNI "RED" "GRN"addr = [%p]" CYN "size = [%zu]"RESET" info = [%d]\n", ptr, ptr->size, ptr->info);
-	// dprintf(2, "%s %p\n", "MALLOC TYNI FIN ADDRESS => ", ptr);
-	write(2, "SUPER_TYNI_FIN\n", 15);
 	return (((ptr && ptr != ((void *)-1)) ? ptr->data : NULL));
 }

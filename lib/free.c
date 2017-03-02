@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/17 11:44:30 by srabah            #+#    #+#             */
-/*   Updated: 2017/03/01 21:39:52 by srabah           ###   ########.fr       */
+/*   Updated: 2017/03/02 03:03:27 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "malloc.h"
@@ -16,21 +16,22 @@ static inline void	free_splite_block(t_block *ptr, size_t block_size, int type)
 	t_block *tmp;
 	t_block *new;
 	int		nb_block;
+	int		i;
 
 	tmp = ptr;
+	i = 1;
 	nb_block = tmp->size / block_size;
-	while(nb_block)
+	while(i < nb_block)
 	{
-		new = tmp->ptr + (block_size - SIZE_ST_HEAD);
+		new = (t_block*) tmp->data + block_size - SIZE_ST_HEAD;
 		tmp->next = new;
 		tmp->size = block_size;
 		ptr->info |= type;
 		ptr->info ^= OPT_FREE;
 		ptr->ptr = ptr->data;
 		tmp = tmp->next;
-		nb_block--;
+		i++;
 	}
-
 }
 // static inline void	check_unmap(t_block *ptr)
 // {
@@ -78,13 +79,12 @@ static inline int	check_addr(void *ptr)
 	int i;
 
 	i = 0;
-	ptr -= OFFSETOFF(t_block, data);
 
 	tmp = g_mem.m_tyni;
 	loop:
 	while(tmp)
 	{
-		if (tmp == ptr)
+		if (tmp->data == ptr)
 			return (1);
 		tmp = tmp->next;
 	}
@@ -101,19 +101,21 @@ static inline int	check_addr(void *ptr)
 void	free(void *ptr)
 {
 	pthread_mutex_lock(&(g_mem.mutex));
-	// dprintf(2, "free START === %p\n", ptr);
-	if (ptr == NULL || !check_addr(ptr))
+	if (!ptr || !check_addr(ptr))
 	{
 		pthread_mutex_unlock(&(g_mem.mutex));
 		return ;
 	}
+
 	ptr -= OFFSETOFF(t_block, data);
+	write(2,((t_block *)(ptr))->data, ((t_block *)(ptr))->size);
 	((t_block *)(ptr))->info ^= OPT_FREE;
 	if (CHECK_BIT(((t_block *)(ptr))->info, OPT_TYNI))
 	{
 		g_mem.use_tyni -= ((t_block *)(ptr))->size;
 		if (((t_block *)(ptr))->size > TYNI_BLOCK)
 			free_splite_block(((t_block *)(ptr)), TYNI_BLOCK, OPT_TYNI);
+	
 	}
 	else if (CHECK_BIT(((t_block *)(ptr))->info, OPT_SMALL))
 	{
@@ -131,9 +133,7 @@ void	free(void *ptr)
 	}
 	// if (!CHECK_BIT(((t_block *)(ptr))->info, OPT_LARGE) && CHECK_BIT(((t_block *)(ptr))->info, OPT_MAP_HEAD))
 	// {
-
-	// 	dprintf(2, "%s\n", "CA------------FEBABE");
+	// 	write(2, "toto rina\n", 10);
 	// }
-	// dprintf(2, "FREE FIN");
 	pthread_mutex_unlock(&(g_mem.mutex));
 }

@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/15 16:23:41 by srabah            #+#    #+#             */
-/*   Updated: 2017/03/01 21:40:09 by srabah           ###   ########.fr       */
+/*   Updated: 2017/03/02 03:03:17 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "malloc.h"
@@ -21,7 +21,6 @@ static inline void	set_zero_block(void *ptr)
 	i = 0;
 	ptr -= OFFSETOFF(t_block, data);
 	len = ((t_block *)(ptr))->size - SIZE_ST_HEAD;
-	// dprintf(2, "set_zero_block %p %lu", ptr, len);
 	while(i < len)
 	{
 		((t_block *)(ptr))->data[i] = 0;
@@ -33,13 +32,11 @@ void	*calloc(size_t count, size_t size)
 {
 	void *ptr;
 
-	// dprintf(2, "CALLOC count = %zu size %zu",count, size);
 	if (!count || !size)
 		return(NULL);
 	ptr = malloc((count * size));
 	if (ptr)
 		set_zero_block(ptr);
-	// dprintf(2, "CALLOC FIN");
 	return(ptr);
 }
 
@@ -51,7 +48,6 @@ void	*realloc(void *ptr, size_t size)
 	size_t	len;
 	size_t	i;
 
-	// dprintf(2, "%s\n", "SUPER REALLOC");
 	i = 0;
 	if (!ptr)
 		return(malloc(size));
@@ -94,7 +90,6 @@ void	*malloc(size_t size) // attention au size_t max ====> 18446744073709551615
 		init_memory(100, 100);
 	len = (size <= TYNI_MAX) ? 1 : (ROUND_UP_PAGE(size, TYNI_MAX));
 	len_small = (size <= SMALL_MIN) ? 1 : (ROUND_UP_PAGE(size, SMALL_MIN));
-	write(2, "SUPER\n", 6);
 	if (len <= 4)
 		return (alloc_tyni(len));
 	else if (len_small <= 4)
