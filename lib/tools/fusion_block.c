@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/15 16:26:24 by srabah            #+#    #+#             */
-/*   Updated: 2017/03/02 03:04:29 by srabah           ###   ########.fr       */
+/*   Updated: 2017/03/04 01:45:22 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,16 +37,11 @@ void	*find_fusion_location(t_block *block, size_t size)
 			if (i == size)
 			{
 				ptr->next = tmp->next;
-				// write(2, "return\n", 7);
 				return (ptr);
 			}
 			tmp = tmp->next;
-			// write(2, "L\n", 2);
 		}
-		// write(2, "S\n", 2);
 		ptr = ptr->next;
 	}
-	// write(2, "fusion NULL\n", 12);
-	// dprintf(2, "Fin de la fusion");
 	return (NULL);
 }

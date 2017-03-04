@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/17 11:44:30 by srabah            #+#    #+#             */
-/*   Updated: 2017/03/02 03:03:27 by srabah           ###   ########.fr       */
+/*   Updated: 2017/03/04 01:46:27 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "malloc.h"
@@ -14,13 +14,16 @@
 static inline void	free_splite_block(t_block *ptr, size_t block_size, int type)
 {
 	t_block *tmp;
+	t_block *tmp2;
 	t_block *new;
 	int		nb_block;
 	int		i;
 
+
 	tmp = ptr;
 	i = 1;
 	nb_block = tmp->size / block_size;
+	tmp2 = ptr->next;
 	while(i < nb_block)
 	{
 		new = (t_block*) tmp->data + block_size - SIZE_ST_HEAD;
@@ -32,6 +35,7 @@ static inline void	free_splite_block(t_block *ptr, size_t block_size, int type)
 		tmp = tmp->next;
 		i++;
 	}
+	// ft_printf("[%p]\n", tmp->next);
 }
 // static inline void	check_unmap(t_block *ptr)
 // {
@@ -100,9 +104,11 @@ static inline int	check_addr(void *ptr)
 
 void	free(void *ptr)
 {
+	ft_printf("ft_Pro\n");
 	pthread_mutex_lock(&(g_mem.mutex));
 	if (!ptr || !check_addr(ptr))
 	{
+		write(1, "free_fi0\n", 9);
 		pthread_mutex_unlock(&(g_mem.mutex));
 		return ;
 	}
@@ -118,21 +124,17 @@ void	free(void *ptr)
 	}
 	else if (CHECK_BIT(((t_block *)(ptr))->info, OPT_SMALL))
 	{
+		write(1, "free_fi2\n", 9);
 		g_mem.use_small -= ((t_block *)(ptr))->size;
 		if (((t_block *)(ptr))->size > SMALL_BLOCK)
 			free_splite_block(((t_block *)(ptr)), SMALL_BLOCK, OPT_SMALL);
 	}
 	else if (CHECK_BIT(((t_block *)(ptr))->info, OPT_LARGE))
 	{
+		write(1, "free_fi3\n", 9);
 		g_mem.use_large -= ((t_block *)(ptr))->size;
 		g_mem.size_large -= ((t_block *)(ptr))->size;
 		unmap_block(&g_mem.m_large, ptr);
-		pthread_mutex_unlock(&(g_mem.mutex));
-		return	;
 	}
-	// if (!CHECK_BIT(((t_block *)(ptr))->info, OPT_LARGE) && CHECK_BIT(((t_block *)(ptr))->info, OPT_MAP_HEAD))
-	// {
-	// 	write(2, "toto rina\n", 10);
-	// }
 	pthread_mutex_unlock(&(g_mem.mutex));
 }

@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/15 16:25:37 by srabah            #+#    #+#             */
-/*   Updated: 2017/02/28 21:41:55 by srabah           ###   ########.fr       */
+/*   Updated: 2017/03/04 01:35:00 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ void    				*realloc(void *, size_t);
 ** free
 */
 void 					free(void *ptr);
+int						ft_printf(const char * restrict format, ...);
 /*
 ** TOOLS
 */

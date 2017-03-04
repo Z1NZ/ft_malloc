@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/15 15:33:47 by srabah            #+#    #+#             */
-/*   Updated: 2017/03/02 03:04:21 by srabah           ###   ########.fr       */
+/*   Updated: 2017/03/04 01:45:53 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,8 +87,8 @@ void					*alloc_tyni(size_t size)
 {
 	t_block *ptr;
 
+
 	ptr = NULL;
-	// write(2, "t\n", 2);
 	if (g_mem.size_tyni == 0)
 	{
 		if (init_tyni_page(ROUND_UP_PAGE(size * TYNI_BLOCK, g_mem.page)) == 1)
@@ -105,6 +105,38 @@ void					*alloc_tyni(size_t size)
 	}
 	if (ptr && ptr != ((void *)-1))
 		set_block(ptr, TYNI_BLOCK * size, OPT_FREE);
+		// t_block *tmp;
+
+	// tmp = g_mem.m_tyni;
+	// int j = 0;
+	// while(tmp)
+	// {
+	// 	printf("TYNI "RED"pos = [%d]"GRN"addr = [%p]" CYN "size = [%zu]"RESET" info = [%d]\n", j, tmp, tmp->size, tmp->info);
+	// 	tmp = tmp->next;
+	// 	j++;
+	// }
+
+	// tmp = g_mem.m_small;
+	// j = 0;
+	// while(tmp)
+	// {
+	// 	printf("SMALL "RED"pos = [%d]"GRN"addr = [%p]" CYN "size = [%zu]"RESET" info = [%d]\n", j, tmp, tmp->size, tmp->info);
+	// 	tmp = tmp->next;
+	// 	j++;
+	// }
+
+	// tmp = g_mem.m_large;
+	// j = 0;
+	// while(tmp)
+	// {
+	// 	printf("LARGE "RED"pos = [%d]"GRN"addr = [%p]" CYN "size = [%zu]"RESET" info = [%d]\n", j, tmp, tmp->size, tmp->info);
+	// 	tmp = tmp->next;
+	// 	j++;
+	// }
+	// printf("\ng_Memory tyni -> (%zu / %zu)\n", g_mem.use_tyni, g_mem.size_tyni);
+	// printf("\ng_Memory small -> (%zu / %zu)\n", g_mem.use_small, g_mem.size_small);
+	// printf("\ng_Memory large -> (%zu / %zu)\n", g_mem.use_large, g_mem.size_large);
+	// printf("%p\n", ptr);
 	pthread_mutex_unlock(&(g_mem.mutex));
 	return (((ptr && ptr != ((void *)-1)) ? ptr->data : NULL));
 }
