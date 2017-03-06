@@ -6,7 +6,7 @@
 #    By: srabah <srabah@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/03/04 20:11:58 by srabah            #+#    #+#              #
-#    Updated: 2015/03/04 20:24:28 by srabah           ###   ########.fr        #
+#    Updated: 2017/03/06 05:31:36 by srabah           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,8 +15,8 @@ NAME = libftprintf.a
 NAME_TEST = test_pf
 
 #	GCC flags
-CFLAGS = -Werror
-ALL_CFLAGS = -Wall -Wextra $(CFLAGS)
+CFLAGS =
+ALL_CFLAGS = -Wall -Wextra -Werror $(CFLAGS)
 
 #	Includes directories
 INC_LIBFT = libft/includes
