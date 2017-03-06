@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/15 16:23:41 by srabah            #+#    #+#             */
-/*   Updated: 2017/03/04 01:47:43 by srabah           ###   ########.fr       */
+/*   Updated: 2017/03/06 11:38:43 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "malloc.h"
@@ -18,7 +18,7 @@ static inline void	set_zero_block(void *ptr)
 	size_t len;
 	size_t i;
 
-	i = 1;
+	i = 0;
 	ptr -= OFFSETOFF(t_block, data);
 	len = ((t_block *)(ptr))->size - SIZE_ST_HEAD;
 	while(i < len)
@@ -31,13 +31,14 @@ static inline void	set_zero_block(void *ptr)
 void	*calloc(size_t count, size_t size)
 {
 	void *ptr;
-
-
-	if (!count || !size)
-		return(NULL);
+	write(2, "calloc\n", 7);
+	// printf("count[%lu]size[%lu]\n", count, size);
+	if (size == 0)
+		size = 1;
 	ptr = malloc((count * size));
 	if (ptr)
 		set_zero_block(ptr);
+	write(2, "calloc\n", 7);
 	return(ptr);
 }
 
@@ -210,5 +211,5 @@ void	*malloc(size_t size) // attention au size_t max ====> 18446744073709551615
 // 	printf("\ng_Memory large -> (%zu / %zu)\n", g_mem.use_large, g_mem.size_large);
 // 	printf("%p\n", ptr);
 
-// 	return 0;
 // }
+// 	return 0;

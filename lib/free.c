@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/17 11:44:30 by srabah            #+#    #+#             */
-/*   Updated: 2017/03/04 01:46:27 by srabah           ###   ########.fr       */
+/*   Updated: 2017/03/06 11:47:23 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "malloc.h"
@@ -77,7 +77,7 @@ static inline void	unmap_block(t_block **head, t_block *ptr)
 		tmp = tmp->next;
 	}
 }
-static inline int	check_addr(void *ptr)
+static inline int	check_addr(void *ptr) /// mega probleme sur le check 
 {
 	t_block *tmp;
 	int i;
@@ -86,11 +86,13 @@ static inline int	check_addr(void *ptr)
 
 	tmp = g_mem.m_tyni;
 	loop:
+		write(1, "free_007\n", 9);
 	while(tmp)
 	{
-		if (tmp->data == ptr)
+		if (tmp->ptr == ptr)
 			return (1);
 		tmp = tmp->next;
+		// write(1, "free_007\n", 9);
 	}
 	++i;
 	if (i == 1)
@@ -104,7 +106,12 @@ static inline int	check_addr(void *ptr)
 
 void	free(void *ptr)
 {
-	ft_printf("ft_Pro\n");
+	write(1, "free\n", 5);
+	t_block *tmp;
+	tmp -= OFFSETOFF(t_block, ptr);
+
+	printf(RED "addr = [%p]\n"CYN "size = [%zu]\n"RESET" info = [%d]\n", tmp, tmp->size, tmp->info);
+
 	pthread_mutex_lock(&(g_mem.mutex));
 	if (!ptr || !check_addr(ptr))
 	{
@@ -112,7 +119,7 @@ void	free(void *ptr)
 		pthread_mutex_unlock(&(g_mem.mutex));
 		return ;
 	}
-
+	write(1, "ptr exxxxxi\n", 13);
 	ptr -= OFFSETOFF(t_block, data);
 	((t_block *)(ptr))->info ^= OPT_FREE;
 	if (CHECK_BIT(((t_block *)(ptr))->info, OPT_TYNI))
@@ -136,5 +143,6 @@ void	free(void *ptr)
 		g_mem.size_large -= ((t_block *)(ptr))->size;
 		unmap_block(&g_mem.m_large, ptr);
 	}
+	write(1, "toto\n", 5);
 	pthread_mutex_unlock(&(g_mem.mutex));
 }

@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/15 16:23:41 by srabah            #+#    #+#             */
-/*   Updated: 2017/03/03 16:30:57 by srabah           ###   ########.fr       */
+/*   Updated: 2017/03/06 01:32:01 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,106 +90,50 @@ int main(int argc, char const *argv[])
 	char	*ptr;
 	char	*ptr2;
 	int		i;
+	int		j;
 
 	i = 0;
 	ptr = NULL;
 	ptr2 = NULL;
 	printf("taille du block ====		[%zu]		====\n", sizeof(t_block));
 	if (argc != 2)
+	{
+		printf("%s\n",  "sortie ** argv missing");
 		return (1);
-	// free(ptr); 
+	}
+	free(ptr); 
 	while(i < 5)
 	{
-		printf("%s\n", "SIII");
-		ptr = (char *)malloc(atol(argv[1]));
-		printf("[%d] === > %p\n", i, ptr);
+		ptr = (char *)realloc(ptr, atol(argv[1]) * i);
+		printf("[%d] realloc === > %p\n", i, ptr);
+		j = 0;
+		while(j < atoi(argv[1]) * i)
+		{
+			ptr[j] = 'a';
+			j++;
+		}
+		ptr[j] = '\0';
+		printf("%s\n", ptr);
 		// free(ptr);
-		ptr = NULL;
-		printf("%s\n", ";SIPPPPP");
-	
+		// ptr = NULL;
 		i++;
 	}
-	// if (!ptr)
-		// return(1);
-	// while(i <= atoi(argv[1]))
-	// {
-	// 	ptr[i] = 'a';
-	// 	i++;
-	// }
-	// printf("value ptr [%s]\n", ptr);
-	// if (argc == 2)
-		// ptr2 = (char *)malloc(atol(argv[1]));
-	// i = 0;
-	// while(i <= atoi(argv[1]))
-	// {
-	// 	ptr2[i] = 'b';
-	// 	i++;
-	// }
-	// printf("------addr ptr2	[%p]\n", ptr2);
-	// printf("value ptr2	[%s]\n\n\n\n\n\n\n",ptr2);
-
-	// printf("taille de la espace[%zu]\ntaille de l'espace uttiliser[%zu]\n\n\n", g_mem.size_tyni, g_mem.use_tyni);
-	// printf("addr ptr  [%p]\n", ptr);
-	// printf("value ptr [%s]\n", ptr);
-	// i = 0;
-	// while (i < 300)
-	// {
-	// 	printf("%d => ", i);
-	// 	ptr2 = (char *)malloc(atol(argv[1]));
-	// 	printf("%p null = %p\n", ptr2, NULL);
-	// 	i++;
-	// }
-
-	// LIST_HEAD(head);
-	// int page = getpagesize();
-	// t_block *ptr = malloc(sizeof(t_block));
-	// list_add_tail(&(ptr->list), &head);
-	// ptr->free = 88999;
-	// t_block *ptr2 = (t_block *)malloc(sizeof(t_block));
-	// list_add_tail(&(ptr2->list), &head);
-	// ptr2->free = 999999;
-	// int *test = &(ptr2->free);
-	// t_block *ptr3 = list_entry(test, t_block, free);
-	// printf("ptr2 == [%p] -> ptr3 [%p] \n", ptr2, ptr3);
-	// printf("page size ===> [%d]", getpagesize());
-	// printf("\ntaille du block[%lu]\n", sizeof(t_block));
-	// char *toto = (char *)mmap(NULL, getpagesize(), PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
-	// printf("[%zd]", write(1, toto, page));
-	// printf("[%p]", toto);
-	// toto = malloc(0);
-	// printf("[%p]", toto);
-	// t_block *tmp;
-
-	// tmp = g_mem.m_tyni;
-	// int j = 0;
-	// while(tmp)
-	// {
-	// 	printf("TYNI "RED"pos = [%d]"GRN"addr = [%p]" CYN "size = [%zu]"RESET" info = [%d]\n", j, tmp, tmp->size, tmp->info);
-	// 	tmp = tmp->next;
-	// 	j++;
-	// }
-
-	// tmp = g_mem.m_small;
-	// j = 0;
-	// while(tmp)
-	// {
-	// 	printf("SMALL "RED"pos = [%d]"GRN"addr = [%p]" CYN "size = [%zu]"RESET" info = [%d]\n", j, tmp, tmp->size, tmp->info);
-	// 	tmp = tmp->next;
-	// 	j++;
-	// }
-
-	// tmp = g_mem.m_large;
-	// j = 0;
-	// while(tmp)
-	// {
-	// 	printf("LARGE "RED"pos = [%d]"GRN"addr = [%p]" CYN "size = [%zu]"RESET" info = [%d]\n", j, tmp, tmp->size, tmp->info);
-	// 	tmp = tmp->next;
-	// 	j++;
-	// }
-	// printf("\ng_Memory tyni -> (%zu / %zu)\n", g_mem.use_tyni, g_mem.size_tyni);
-	// printf("\ng_Memory small -> (%zu / %zu)\n", g_mem.use_small, g_mem.size_small);
-	// printf("\ng_Memory large -> (%zu / %zu)\n", g_mem.use_large, g_mem.size_large);
-	// printf("%p\n", ptr);
-
+	i = 0;
+	while(i < 5)
+	{
+		ptr = (char *)calloc(sizeof(char), atol(argv[1]) * i);
+		printf("[%d] calloc == > %p\n", i, ptr);
+		j = 0;
+		while(j <= atoi(argv[1]) * i)
+		{
+			ptr[j] = 'b';
+			j++;
+		}
+		ptr[j] = '\0';
+		printf("%s\n", ptr);
+		// free(ptr);
+		ptr = NULL;
+		i++;
+	}
 	return 0;
 }

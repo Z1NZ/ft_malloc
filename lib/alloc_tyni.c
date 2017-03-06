@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/15 15:33:47 by srabah            #+#    #+#             */
-/*   Updated: 2017/03/04 01:45:53 by srabah           ###   ########.fr       */
+/*   Updated: 2017/03/06 11:37:26 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,9 +88,11 @@ void					*alloc_tyni(size_t size)
 	t_block *ptr;
 
 
+	// write(1, "tyni\n", 5);
 	ptr = NULL;
 	if (g_mem.size_tyni == 0)
 	{
+		// write(1, "tyni0\n", 6);
 		if (init_tyni_page(ROUND_UP_PAGE(size * TYNI_BLOCK, g_mem.page)) == 1)
 			return (NULL);
 	}
@@ -105,7 +107,9 @@ void					*alloc_tyni(size_t size)
 	}
 	if (ptr && ptr != ((void *)-1))
 		set_block(ptr, TYNI_BLOCK * size, OPT_FREE);
-		// t_block *tmp;
+	
+	// write(1, "SUPER\n", 6);
+	// t_block *tmp;
 
 	// tmp = g_mem.m_tyni;
 	// int j = 0;
@@ -133,9 +137,9 @@ void					*alloc_tyni(size_t size)
 	// 	tmp = tmp->next;
 	// 	j++;
 	// }
-	// printf("\ng_Memory tyni -> (%zu / %zu)\n", g_mem.use_tyni, g_mem.size_tyni);
-	// printf("\ng_Memory small -> (%zu / %zu)\n", g_mem.use_small, g_mem.size_small);
-	// printf("\ng_Memory large -> (%zu / %zu)\n", g_mem.use_large, g_mem.size_large);
+	// ft_printf("\ng_Memory tyni -> (%zu / %zu)\n", g_mem.use_tyni, g_mem.size_tyni);
+	// ft_printf("\ng_Memory small -> (%zu / %zu)\n", g_mem.use_small, g_mem.size_small);
+	// ft_printf("\ng_Memory large -> (%zu / %zu)\n", g_mem.use_large, g_mem.size_large);
 	// printf("%p\n", ptr);
 	pthread_mutex_unlock(&(g_mem.mutex));
 	return (((ptr && ptr != ((void *)-1)) ? ptr->data : NULL));

@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/15 16:21:17 by srabah            #+#    #+#             */
-/*   Updated: 2017/03/04 01:45:48 by srabah           ###   ########.fr       */
+/*   Updated: 2017/03/06 01:20:31 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ static int			init_small_page(size_t nb)
 
 void				*alloc_small(size_t size)
 {
-	write(2, "small\n", 5);
+	// write(2, "small\n", 5);
 	t_block *ptr;
 
 	ptr = NULL;
@@ -105,7 +105,7 @@ void				*alloc_small(size_t size)
 	}
 	if (ptr && ptr != ((void *)-1))
 		set_block(ptr, SMALL_BLOCK * size, OPT_FREE);
-	ft_printf("%s\n", "MALLOC SMALL FIN");
+	// ft_printf("%s\n", "MALLOC SMALL FIN");
 	pthread_mutex_unlock(&(g_mem.mutex));
 	return (((ptr && ptr != ((void *)-1)) ? ptr->data : NULL));
 }
