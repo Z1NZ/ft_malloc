@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/15 15:33:47 by srabah            #+#    #+#             */
-/*   Updated: 2017/03/06 11:37:26 by srabah           ###   ########.fr       */
+/*   Updated: 2017/03/07 08:43:39 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,6 @@ static void				*add_page(size_t size)
 	tmp->next = ptr;
 	ptr->info |= OPT_MAP_HEAD;
 	set_block(ptr, TYNI_BLOCK, 0);
-	ptr->next = NULL;
 	set_page(ptr, TYNI_BLOCK, size);
 	return (ptr);
 }

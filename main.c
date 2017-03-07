@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/15 16:23:41 by srabah            #+#    #+#             */
-/*   Updated: 2017/03/06 01:32:01 by srabah           ###   ########.fr       */
+/*   Updated: 2017/03/07 07:09:18 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,8 +85,6 @@ typedef struct			s_mem
 
 int main(int argc, char const *argv[])
 {
-
-	dprintf(2, "TOTOTO");
 	char	*ptr;
 	char	*ptr2;
 	int		i;
@@ -95,17 +93,12 @@ int main(int argc, char const *argv[])
 	i = 0;
 	ptr = NULL;
 	ptr2 = NULL;
-	printf("taille du block ====		[%zu]		====\n", sizeof(t_block));
 	if (argc != 2)
-	{
-		printf("%s\n",  "sortie ** argv missing");
 		return (1);
-	}
 	free(ptr); 
 	while(i < 5)
 	{
 		ptr = (char *)realloc(ptr, atol(argv[1]) * i);
-		printf("[%d] realloc === > %p\n", i, ptr);
 		j = 0;
 		while(j < atoi(argv[1]) * i)
 		{
@@ -113,16 +106,15 @@ int main(int argc, char const *argv[])
 			j++;
 		}
 		ptr[j] = '\0';
-		printf("%s\n", ptr);
-		// free(ptr);
-		// ptr = NULL;
+		free(ptr);
+		ptr = NULL;
 		i++;
 	}
+	ft_prinf("ji suis\n");
 	i = 0;
 	while(i < 5)
 	{
 		ptr = (char *)calloc(sizeof(char), atol(argv[1]) * i);
-		printf("[%d] calloc == > %p\n", i, ptr);
 		j = 0;
 		while(j <= atoi(argv[1]) * i)
 		{
@@ -130,8 +122,7 @@ int main(int argc, char const *argv[])
 			j++;
 		}
 		ptr[j] = '\0';
-		printf("%s\n", ptr);
-		// free(ptr);
+		free(ptr);
 		ptr = NULL;
 		i++;
 	}
