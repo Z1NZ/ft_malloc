@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: srabah <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/04 20:43:17 by srabah            #+#    #+#             */
-/*   Updated: 2015/03/04 20:43:44 by srabah           ###   ########.fr       */
+/*   Updated: 2017/03/07 04:38:46 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <stdarg.h>
 # include <stdlib.h>
+ #include <sys/mman.h>
 
 typedef struct	s_context
 {
@@ -54,6 +55,8 @@ typedef int		t_pfn(va_list *ap);
 # define MODIF_LL				512
 # define MODIF_J				1024
 # define MODIF_Z				2048
+# define FLAG_MALLOC		PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE | MAP_SHARED
+
 
 # define PREC_STATE				4096
 

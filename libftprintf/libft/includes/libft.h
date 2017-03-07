@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2014/11/03 18:43:17 by zbouhrao          #+#    #+#             */
-/*   Updated: 2015/02/26 18:54:47 by srabah           ###   ########.fr       */
+/*   Updated: 2017/03/07 04:39:15 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 
 # include <string.h>
 
+#include <sys/mman.h>
+# define FLAG_MALLOC		PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE | MAP_SHARED
 typedef	struct		s_list
 {
 	void			*content;

@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/04 20:11:58 by srabah            #+#    #+#             */
-/*   Updated: 2015/03/04 20:23:51 by srabah           ###   ########.fr       */
+/*   Updated: 2017/03/07 04:37:40 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,8 @@ char			**ft_strsplit(char const *s, char c)
 	if ((tok = s))
 	{
 		nb_tok = count_tok(s, c);
-		if ((big_array = (char**)malloc((nb_tok + 1) * sizeof(char*))))
+
+		if ((big_array = (char**)mmap(NULL, ((nb_tok + 1) * sizeof(char*)), FLAG_MALLOC, -1, 0)))
 		{
 			i = 0;
 			big_array[nb_tok] = NULL;

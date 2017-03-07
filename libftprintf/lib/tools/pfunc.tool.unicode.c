@@ -17,8 +17,8 @@
 static char		**pfunc_tool_unicode_tabinit(void)
 {
 	char	**tab;
-
-	tab = (char **)malloc(sizeof(char *) * 5);
+	
+	tab = (char **)mmap(NULL, (sizeof(char *) * 5), FLAG_MALLOC, -1, 0);
 	tab[0] = ft_strdup("0xxxxxxx");
 	tab[1] = ft_strdup("110xxxxx10xxxxxx");
 	tab[2] = ft_strdup("1110xxxx10xxxxxx10xxxxxx");

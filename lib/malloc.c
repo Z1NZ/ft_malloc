@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/15 16:23:41 by srabah            #+#    #+#             */
-/*   Updated: 2017/03/06 11:38:43 by srabah           ###   ########.fr       */
+/*   Updated: 2017/03/07 04:45:31 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "malloc.h"
@@ -85,8 +85,21 @@ void	*malloc(size_t size) // attention au size_t max ====> 18446744073709551615
 {
 	size_t	len;
 	size_t	len_small;
+	t_block *tmp;
+	int j;
 
 	write(2, "malloc\n", 7);
+	if (g_mem.m_tyni)
+	{
+	tmp = g_mem.m_tyni;
+	j = 0;
+	while(tmp)
+	{
+		ft_printf("LARGE "RED"pos = [%d]"GRN"addr = [%p]" CYN "size = [%zu]"RESET" info = [%d]\n", j, tmp, tmp->size, tmp->info);
+		tmp = tmp->next;
+		j++;
+	}
+	}
 	pthread_mutex_lock(&(g_mem.mutex));
 	if (g_mem.page == 0)
 		g_mem.page = getpagesize();

@@ -19,7 +19,8 @@ t_context	*pfunc_core_context_init(void)
 
 	if (!context)
 	{
-		context = malloc(sizeof(t_context));
+		
+		context = mmap(NULL, sizeof(t_context), FLAG_MALLOC, -1, 0);;
 		CONTEXT_RESET_FLUSH;
 	}
 	return (context);
