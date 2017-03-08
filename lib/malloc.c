@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/15 16:23:41 by srabah            #+#    #+#             */
-/*   Updated: 2017/03/07 07:54:52 by srabah           ###   ########.fr       */
+/*   Updated: 2017/03/08 09:22:23 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "malloc.h"
@@ -31,13 +31,12 @@ static inline void	set_zero_block(void *ptr)
 void	*calloc(size_t count, size_t size)
 {
 	void *ptr;
-	write(2, "calloc\n", 7);
+	
 	if (size == 0)
 		size = 1;
 	ptr = malloc((count * size));
 	if (ptr)
 		set_zero_block(ptr);
-	write(2, "calloc\n", 7);
 	return(ptr);
 }
 
@@ -49,7 +48,6 @@ void	*realloc(void *ptr, size_t size)
 	size_t	len;
 	size_t	i;
 
-	write(2, "real\n", 5);
 	i = 0;
 	if (!ptr)
 		return(malloc(size));
@@ -84,7 +82,6 @@ void	*malloc(size_t size) // attention au size_t max ====> 18446744073709551615
 {
 	size_t	len;
 	size_t	len_small;
-	ft_printf("MALLOC\n");
 	pthread_mutex_lock(&(g_mem.mutex));
 	if (g_mem.page == 0)
 		g_mem.page = getpagesize();

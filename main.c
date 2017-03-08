@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/15 16:23:41 by srabah            #+#    #+#             */
-/*   Updated: 2017/03/07 07:09:18 by srabah           ###   ########.fr       */
+/*   Updated: 2017/03/07 08:46:32 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,20 @@ int main(int argc, char const *argv[])
 	if (argc != 2)
 		return (1);
 	free(ptr); 
+	while(i < 300)
+	{
+		ptr = (char *)calloc(sizeof(char), atol(argv[1]) * i);
+		j = 0;
+		while(j <= atoi(argv[1]) * i)
+		{
+			ptr[j] = 'b';
+			j++;
+		}
+		ptr[j] = '\0';
+		ptr = NULL;
+		i++;
+	}
+	i = 0;
 	while(i < 5)
 	{
 		ptr = (char *)realloc(ptr, atol(argv[1]) * i);

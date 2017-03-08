@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/15 15:33:47 by srabah            #+#    #+#             */
-/*   Updated: 2017/03/07 08:43:39 by srabah           ###   ########.fr       */
+/*   Updated: 2017/03/08 05:12:51 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ static void				*add_page(size_t size)
 		return (NULL);
 	g_mem.size_tyni += g_mem.page * size;
 	tmp = g_mem.m_tyni;
-	while (tmp->next)
+	while (tmp->next != NULL)
 		tmp = tmp->next;
 	tmp->next = ptr;
 	ptr->info |= OPT_MAP_HEAD;
@@ -86,12 +86,9 @@ void					*alloc_tyni(size_t size)
 {
 	t_block *ptr;
 
-
-	// write(1, "tyni\n", 5);
 	ptr = NULL;
 	if (g_mem.size_tyni == 0)
 	{
-		// write(1, "tyni0\n", 6);
 		if (init_tyni_page(ROUND_UP_PAGE(size * TYNI_BLOCK, g_mem.page)) == 1)
 			return (NULL);
 	}
