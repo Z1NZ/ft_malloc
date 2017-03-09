@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/15 16:21:17 by srabah            #+#    #+#             */
-/*   Updated: 2017/03/06 01:20:31 by srabah           ###   ########.fr       */
+/*   Updated: 2017/03/09 14:37:53 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,9 @@ static inline void	set_block(t_block *ptr, size_t size, int on)
 	if (on)
 		g_mem.use_small += size;
 }
+
+
+
 
 static inline void	set_page(t_block *ptr, size_t size_block, int nb)
 {
@@ -46,7 +49,6 @@ static inline void	set_page(t_block *ptr, size_t size_block, int nb)
 	tmp->next = NULL;
 }
 
-
 static void			*add_page(size_t size)
 {
 	t_block		*ptr;
@@ -62,7 +64,6 @@ static void			*add_page(size_t size)
 	tmp->next = ptr;
 	ptr->info |= OPT_MAP_HEAD;
 	set_block(ptr, SMALL_BLOCK, 0);
-	ptr->next = NULL;
 	set_page(ptr, SMALL_BLOCK, size);
 	return (ptr);
 }
@@ -85,7 +86,7 @@ static int			init_small_page(size_t nb)
 
 void				*alloc_small(size_t size)
 {
-	// write(2, "small\n", 5);
+	write(2, "small\n", 6);
 	t_block *ptr;
 
 	ptr = NULL;
@@ -95,17 +96,24 @@ void				*alloc_small(size_t size)
 			return (NULL);
 	}
 	if ((g_mem.size_small - g_mem.use_small) >= SMALL_BLOCK * size)
+	{
+		write(1, "F1\n", 3);
 		ptr = find_fusion_location(g_mem.m_small, size);
+	}
 	if (!ptr)
 	{
+		write(1, "F2\n", 3);
 		ptr = add_page(ROUND_UP_PAGE(size * SMALL_BLOCK, g_mem.page));
 		if (!ptr)
 			return (NULL);
 		ptr = find_fusion_location(g_mem.m_small, size);
 	}
 	if (ptr && ptr != ((void *)-1))
+	{
+		write(1, "F3\n", 3);		
 		set_block(ptr, SMALL_BLOCK * size, OPT_FREE);
-	// ft_printf("%s\n", "MALLOC SMALL FIN");
+	}
+	write(2, "SMALL_FIN\n", 10);
 	pthread_mutex_unlock(&(g_mem.mutex));
 	return (((ptr && ptr != ((void *)-1)) ? ptr->data : NULL));
 }

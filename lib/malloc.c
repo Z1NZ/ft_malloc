@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/15 16:23:41 by srabah            #+#    #+#             */
-/*   Updated: 2017/03/08 09:22:23 by srabah           ###   ########.fr       */
+/*   Updated: 2017/03/09 16:46:50 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "malloc.h"
@@ -31,7 +31,8 @@ static inline void	set_zero_block(void *ptr)
 void	*calloc(size_t count, size_t size)
 {
 	void *ptr;
-	
+
+	write(1, "calloc\n", 7);
 	if (size == 0)
 		size = 1;
 	ptr = malloc((count * size));
@@ -44,15 +45,19 @@ void	*calloc(size_t count, size_t size)
 
 void	*realloc(void *ptr, size_t size)
 {
-	void	*tmp;
+	char	*tmp;
 	size_t	len;
 	size_t	i;
 
-	i = 0;
+	write(1, "realloc\n", 8);
 	if (!ptr)
+	{
+		write(1, "simple malloc\n", 14);
 		return(malloc(size));
+	}
 	else if (ptr && size == 0)
 	{
+		write(1, "simple free\n", 12);
 		free(ptr);
 		return(NULL);
 	}
@@ -65,14 +70,17 @@ void	*realloc(void *ptr, size_t size)
 		else
 		{
 			tmp = (void *)malloc(size);
-			tmp -= OFFSETOFF(t_block, data);
+			i = 0;
 			while(i <= len)
 			{
-				((t_block *)(tmp))->data[i] = ((t_block *)(ptr))->data[i];
-				++i;
+				tmp[i] = ((t_block *)(ptr))->data[i];
+				i++;
 			}
 			free(((t_block *)(ptr))->data);
-			return(((t_block *)(tmp))->data);
+			// ft_mem_show(OPT_LARGE);
+			write(1, "FIN_REALLOC\n", 12);
+			// ft_mem_show();
+			return((void *)tmp);
 		}
 	}
 	return(NULL);
@@ -82,11 +90,13 @@ void	*malloc(size_t size) // attention au size_t max ====> 18446744073709551615
 {
 	size_t	len;
 	size_t	len_small;
+	write(1, "malloc\n", 7);
 	pthread_mutex_lock(&(g_mem.mutex));
 	if (g_mem.page == 0)
 		g_mem.page = getpagesize();
 	if (!g_mem.size_tyni && !g_mem.size_small)
 		init_memory(100, 100);
+	// ft_printf("ASK SIZE [%lu]\n", size);
 	len = (size <= TYNI_MAX) ? 1 : (ROUND_UP_PAGE(size, TYNI_MAX));
 	len_small = (size <= SMALL_MIN) ? 1 : (ROUND_UP_PAGE(size, SMALL_MIN));
 	if (len <= 4)

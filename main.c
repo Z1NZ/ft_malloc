@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/15 16:23:41 by srabah            #+#    #+#             */
-/*   Updated: 2017/03/07 08:46:32 by srabah           ###   ########.fr       */
+/*   Updated: 2017/03/09 10:12:53 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,6 @@ typedef struct			s_mem
 	
 }						t_mem;
 
-
 int main(int argc, char const *argv[])
 {
 	char	*ptr;
@@ -96,47 +95,58 @@ int main(int argc, char const *argv[])
 	if (argc != 2)
 		return (1);
 	free(ptr); 
-	while(i < 300)
+	write(1, "CALLOC !!!!!\n", 13);
+	while(i < 250)
 	{
 		ptr = (char *)calloc(sizeof(char), atol(argv[1]) * i);
-		j = 0;
-		while(j <= atoi(argv[1]) * i)
+		if (ptr)
 		{
-			ptr[j] = 'b';
-			j++;
+			j = 0;
+			while(j <= atoi(argv[1]) * i)
+			{
+				ptr[j] = 'b';
+				j++;
+			}
+			ptr[j] = '\0';
 		}
-		ptr[j] = '\0';
 		ptr = NULL;
 		i++;
 	}
+	write(1, "REALLOC @@@@\n", 13);
 	i = 0;
-	while(i < 5)
+	while(i < 250)
 	{
 		ptr = (char *)realloc(ptr, atol(argv[1]) * i);
 		j = 0;
-		while(j < atoi(argv[1]) * i)
+		if (ptr)
 		{
-			ptr[j] = 'a';
-			j++;
+			while(j < atoi(argv[1]) * i)
+			{
+				ptr[j] = 'a';
+				j++;
+			}
+			ptr[j] = '\0';
+			free(ptr);
 		}
-		ptr[j] = '\0';
-		free(ptr);
 		ptr = NULL;
 		i++;
 	}
-	ft_prinf("ji suis\n");
+	write(1, "CALLOC @@@@\n", 12);
 	i = 0;
-	while(i < 5)
+	while(i < 250)
 	{
 		ptr = (char *)calloc(sizeof(char), atol(argv[1]) * i);
 		j = 0;
-		while(j <= atoi(argv[1]) * i)
-		{
-			ptr[j] = 'b';
-			j++;
+		if (ptr)
+		{	
+			while(j <= atoi(argv[1]) * i)
+			{
+				ptr[j] = 'b';
+				j++;
+			}
+			ptr[j] = '\0';
+			free(ptr);
 		}
-		ptr[j] = '\0';
-		free(ptr);
 		ptr = NULL;
 		i++;
 	}

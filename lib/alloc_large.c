@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/14 08:44:38 by srabah            #+#    #+#             */
-/*   Updated: 2017/03/06 01:20:35 by srabah           ###   ########.fr       */
+/*   Updated: 2017/03/09 16:02:45 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,10 @@ static t_block	*init_large(size_t size)
 {
 	t_block *ptr;
 
-	ptr = (t_block *)mmap(NULL, (size + SIZE_ST_HEAD), FLAG_MALLOC, -1, 0);
+	size = size + SIZE_ST_HEAD;
+	size = (size/g_mem.page) + 1;
+	size = size * g_mem.page;
+	ptr = (t_block *)mmap(NULL, size, FLAG_MALLOC, -1, 0);
 	if (ptr == ((void *)-1))
 		return (NULL);
 	ptr->size = size;
@@ -62,7 +65,11 @@ static t_block	*add_large_list(size_t size)
 		return(NULL);
 	while(ptr->next)
 		ptr = ptr->next;
-	tmp = (t_block *)mmap(NULL, (size + SIZE_ST_HEAD), FLAG_MALLOC, -1, 0);
+	size = size + SIZE_ST_HEAD;
+	size = (size/g_mem.page) + 1;
+	size = size * g_mem.page;
+	ft_printf("%lu\n", size);
+	tmp = (t_block *)mmap(NULL, size, FLAG_MALLOC, -1, 0);
 	if (tmp == ((void *)-1))
 		return (NULL);
 	tmp->size = size;
@@ -82,20 +89,26 @@ void	*alloc_large(size_t size)
 {
 	t_block *ptr;
 
-	// write(2, "SUPER_LARGE\n", 12);
+	write(2, "LARGE\n", 6);
 	ptr = NULL;
 	if (g_mem.size_large == 0)
 		ptr = init_large(size);
 	else if ((g_mem.size_large - g_mem.use_large) >= size)
 	{
-
+		write(1, "SISI\n", 5);
 		ptr = find_large_space(size);
 		if (ptr)
 			g_mem.use_large += ptr->size;
 	}
 	if (!ptr)
+	{
+		write(1, "SUPEE\n", 6);
 		ptr = add_large_list(size);
-	// write(2, "SUPER_FIN\n", 10);
+	}
+	if (!ptr)
+		write(2, "LARGE_NULL\n", 11);
+	// ft_mem_show();
+	write(2, "LARGE_FIN\n", 10);
 	pthread_mutex_unlock(&(g_mem.mutex));
 	return (((ptr && ptr != ((void *)-1)) ? ptr->data : NULL));
 }

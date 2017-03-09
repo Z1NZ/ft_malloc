@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/19 16:00:26 by srabah            #+#    #+#             */
-/*   Updated: 2017/02/21 16:36:23 by srabah           ###   ########.fr       */
+/*   Updated: 2017/03/09 13:31:38 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ void	init_memory(size_t block_tyni, size_t block_small)
 	g_mem.main_memory = mmap(NULL, g_mem.page * i , FLAG_MALLOC, -1, 0);
 	if (g_mem.main_memory == ((void *)-1))
 		return  ;
-
 	g_mem.m_tyni = (t_block *)g_mem.main_memory;
 	g_mem.size_tyni = g_mem.page * (ROUND_UP_PAGE((TYNI_BLOCK * block_tyni), g_mem.page));
 	set_page(g_mem.m_tyni, TYNI_BLOCK, ROUND_UP_PAGE((TYNI_BLOCK * block_tyni), g_mem.page), OPT_TYNI + OPT_BUFF);
