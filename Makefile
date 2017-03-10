@@ -6,7 +6,7 @@
 #    By: srabah <srabah@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/02/11 18:45:23 by srabah            #+#    #+#              #
-#    Updated: 2017/03/09 09:43:07 by srabah           ###   ########.fr        #
+#    Updated: 2017/03/10 12:51:33 by srabah           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 #	Library output
@@ -19,7 +19,6 @@ CFLAGS = -Wall -Wextra -Werror
 #	Includes directories
 INC_TR = includes
 INCLUDES += $(addprefix -iquote , $(INC_TR))
-LDFLAGS= -L./libftprintf -lftprintf
 
 #	Sources
 MALLOC_SOURCES = $(shell find lib | grep "\.c$$" | sed "s/\.c$$//g")
@@ -30,7 +29,7 @@ all: $(NAME)
 
 $(NAME): $(OBJS)
 	@echo ">>>>> Génération de malloc"
-	@$(CC) $(LDFLAGS) $(OBJS) -shared -o $(NAME)
+	@$(CC) $(OBJS) -shared -o $(NAME)
 	@echo "Terminée"
 
 # To obtain object files

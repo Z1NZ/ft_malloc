@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/15 15:33:47 by srabah            #+#    #+#             */
-/*   Updated: 2017/03/09 14:25:11 by srabah           ###   ########.fr       */
+/*   Updated: 2017/03/10 12:50:11 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,14 +87,14 @@ void					*alloc_tyni(size_t size)
 	t_block *ptr;
 
 	ptr = NULL;
-	write(2, "TYNI\n", 5);
+
 	if (g_mem.size_tyni == 0)
 	{
 		if (init_tyni_page(ROUND_UP_PAGE(size * TYNI_BLOCK, g_mem.page)) == 1)
 			return (NULL);
 	}
 	if ((g_mem.size_tyni - g_mem.use_tyni) >= TYNI_BLOCK * size)
-		ptr = find_fusion_location(g_mem.m_tyni, size);// fusion  de block
+		ptr = find_fusion_location(g_mem.m_tyni, size);
 	if (!ptr)
 	{
 		ptr = add_page(ROUND_UP_PAGE(size * TYNI_BLOCK, g_mem.page));
@@ -104,10 +104,6 @@ void					*alloc_tyni(size_t size)
 	}
 	if (ptr && ptr != ((void *)-1))
 		set_block(ptr, TYNI_BLOCK * size, OPT_FREE);
-	write(2, "TYNI_#\n", 7);
-	
-	write(1, "SUPER\n", 6);
-	// printf("%p\n", ptr);
 	pthread_mutex_unlock(&(g_mem.mutex));
 	return (((ptr && ptr != ((void *)-1)) ? ptr->data : NULL));
 }
