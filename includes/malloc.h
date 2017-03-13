@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/15 16:25:37 by srabah            #+#    #+#             */
-/*   Updated: 2017/03/13 11:22:07 by srabah           ###   ########.fr       */
+/*   Updated: 2017/03/13 15:04:42 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,11 +91,11 @@ void					free(void *ptr);
 /*
 ** TOOLS
 */
-void					show_alloc_mem();
-void					show_alloc_mem_ex();
+void					show_alloc_mem(void);
+void					show_alloc_mem_ex(void);
 int						check_addr(void *ptr);
+void					*unlock_return_null(void);
 void					*find_fusion_location(t_block *block, size_t size);
-void					show_list(t_block *tmp, char *name);
 
 
 #endif

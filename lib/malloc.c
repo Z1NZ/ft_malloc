@@ -6,38 +6,11 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/15 16:23:41 by srabah            #+#    #+#             */
-/*   Updated: 2017/03/13 14:43:01 by srabah           ###   ########.fr       */
+/*   Updated: 2017/03/13 14:58:54 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "malloc.h"
-
-void		ft_putnbr_fd(int n, int fd);
-void	ft_putchar_fd(char c, int fd);
-void	ft_putchar_fd(char c, int fd)
-{
-	unsigned char	chr;
-
-	chr = (unsigned char)c;
-	write(fd, &chr, 1);
-}
-
-void		ft_putnbr_fd(int n, int fd)
-{
-	unsigned int	count;
-	unsigned int	u_nbr;
-
-	count = 0;
-	u_nbr = n;
-	if (n < 0)
-	{
-		ft_putchar_fd('-', fd);
-		u_nbr = -n;
-	}
-	if (u_nbr / 10)
-		ft_putnbr_fd(u_nbr / 10, fd);
-	ft_putchar_fd(u_nbr % 10 + '0', fd);
-}
-
 
 static inline void	set_zero_block(void *ptr)
 {
@@ -47,7 +20,7 @@ static inline void	set_zero_block(void *ptr)
 	i = 0;
 	ptr -= OFFSETOFF(t_block, data);
 	len = ((t_block *)(ptr))->size - SIZE_ST_HEAD;
-	while(i < len)
+	while (i < len)
 	{
 		((t_block *)(ptr))->data[i] = 0;
 		i++;
@@ -63,7 +36,7 @@ void	*calloc(size_t count, size_t size)
 	ptr = malloc((count * size));
 	if (ptr)
 		set_zero_block(ptr);
-	return(ptr);
+	return (ptr);
 }
 
 void	*realloc(void *ptr, size_t size)
@@ -73,45 +46,42 @@ void	*realloc(void *ptr, size_t size)
 	size_t	i;
 
 	if (!ptr)
-		return(malloc(size));
+		return (malloc(size));
 	else if (ptr && size == 0)
 	{
 		free(ptr);
-		return(NULL);
+		return (NULL);
 	}
 	else if ((check_addr(ptr)) == 0)
-	{
-		return(NULL);
-	}
+		return (NULL);
 	else
 	{
 		ptr -= OFFSETOFF(t_block, data);
 		len = ((t_block *)(ptr))->size - SIZE_ST_HEAD;
 		if (len >= size)
-			return(((t_block *)(ptr))->data);
+			return (((t_block *)(ptr))->data);
 		else
 		{
-			tmp = (void *)malloc(size);
-			if (!tmp)
-				return(tmp);
-			i = 0;
-			while(i < len)
+			if ((tmp = (void *)malloc(size)))
 			{
-				tmp[i] = ((t_block *)(ptr))->data[i];
-				i++;
+				i = 0;
+				while (i < len)
+				{
+					tmp[i] = ((t_block *)(ptr))->data[i];
+					i++;
+				}
+				free(((t_block *)(ptr))->data);
 			}
-			free(((t_block *)(ptr))->data);
-			return((void *)tmp);
+			return (tmp);
 		}
 	}
-	return(NULL);
+	return (NULL);
 }
 
 void	*malloc(size_t size)
 {
 	size_t	len;
 	size_t	len_small;
-
 
 	pthread_mutex_lock(&(g_mem.mutex));
 	if (g_mem.page == 0)

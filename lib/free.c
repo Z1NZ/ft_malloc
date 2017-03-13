@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/17 11:44:30 by srabah            #+#    #+#             */
-/*   Updated: 2017/03/13 11:11:10 by srabah           ###   ########.fr       */
+/*   Updated: 2017/03/13 15:15:54 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static inline void	free_splite_block(t_block *ptr, size_t block_size)
 	ptr->info ^= OPT_FREE;
 	ptr->size = block_size;
 	ptr->ptr = ptr->data;
-	while(i < nb_block)
+	while (i < nb_block)
 	{
 		new = (t_block*)(tmp->ptr + (block_size - SIZE_ST_HEAD));
 		new->info = ptr->info;
@@ -50,11 +50,11 @@ static inline void	unmap_block(t_block **head, t_block *ptr)
 		tmp = ptr->next;
 		if (munmap(ptr, ptr->size) == -1)
 			return ;
-		*head = tmp; 
+		*head = tmp;
 		return ;
 	}
 	tmp = *head;
-	while(tmp)
+	while (tmp)
 	{
 		if (tmp->next == ptr)
 		{
@@ -62,7 +62,7 @@ static inline void	unmap_block(t_block **head, t_block *ptr)
 			if (munmap(ptr, ptr->size) == -1)
 				return ;
 			tmp->next = tampo;
-			break;
+			break ;
 		}
 		tmp = tmp->next;
 	}
@@ -70,35 +70,33 @@ static inline void	unmap_block(t_block **head, t_block *ptr)
 
 int	check_addr(void *ptr)
 {
-	t_block *tmp;
-	int i;
-	int j;
-
+	t_block	*tmp;
+	int		i;
+	int		j;
 
 	i = 0;
 	tmp = g_mem.m_tyni;
-	loop:
-	j = 0;
-	while(tmp)
+	while(i < 3)
 	{
-		if (tmp->data == ptr)
-			return (1);
-		tmp = tmp->next;
-		j++;
+		j = 0;
+		while (tmp)
+		{
+			if (tmp->data == ptr)
+				return (1);
+			tmp = tmp->next;
+			j++;
+		}
+		++i;
+		if (i == 1)
+			tmp = g_mem.m_small;
+		else if (i == 2)
+			tmp = g_mem.m_large;
 	}
-	++i;
-	if (i == 1)
-		tmp = g_mem.m_small;
-	else if (i == 2)
-		tmp = g_mem.m_large;
-	else
-		return (0);
-	goto loop;
+	return (0);
 }
 
 void	free(void *ptr)
 {
-	// write(2, "free\n", 5);
 	pthread_mutex_lock(&(g_mem.mutex));
 	if (!ptr)
 	{
@@ -130,6 +128,6 @@ void	free(void *ptr)
 			g_mem.size_large -= ((t_block *)(ptr))->size;
 			unmap_block(&g_mem.m_large, ptr);
 		}
-	 }
+	}
 	pthread_mutex_unlock(&(g_mem.mutex));
 }
