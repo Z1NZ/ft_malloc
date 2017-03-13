@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/17 11:44:30 by srabah            #+#    #+#             */
-/*   Updated: 2017/03/13 15:15:54 by srabah           ###   ########.fr       */
+/*   Updated: 2017/03/13 18:16:16 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,10 +97,14 @@ int	check_addr(void *ptr)
 
 void	free(void *ptr)
 {
-	pthread_mutex_lock(&(g_mem.mutex));
+	if (pthread_mutex_lock(&(g_mem.mutex_free)) == EINVAL)
+	{
+		pthread_mutex_init(&(g_mem.mutex_free), NULL);
+		pthread_mutex_lock(&(g_mem.mutex_free));	
+	}
 	if (!ptr)
 	{
-		pthread_mutex_unlock(&(g_mem.mutex));
+		pthread_mutex_unlock(&(g_mem.mutex_free));
 		return ;
 	}
 	if ((check_addr(ptr)) > 0)
@@ -129,5 +133,5 @@ void	free(void *ptr)
 			unmap_block(&g_mem.m_large, ptr);
 		}
 	}
-	pthread_mutex_unlock(&(g_mem.mutex));
+	pthread_mutex_unlock(&(g_mem.mutex_free));
 }

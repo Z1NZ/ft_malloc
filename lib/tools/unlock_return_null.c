@@ -1,20 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   unlock_return.c                                    :+:      :+:    :+:   */
+/*   unlock_return_null.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/13 15:02:33 by srabah            #+#    #+#             */
-/*   Updated: 2017/03/13 15:04:36 by srabah           ###   ########.fr       */
+/*   Updated: 2017/03/13 18:11:08 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc.h"
 
-void		*unlock_return_null(void)
+void		*unlock_return_null(pthread_mutex_t *m)
 {
 
-	pthread_mutex_unlock(&(g_mem.mutex));
+	pthread_mutex_unlock(m);
 	return (NULL);
 }

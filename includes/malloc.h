@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/15 16:25:37 by srabah            #+#    #+#             */
-/*   Updated: 2017/03/13 15:04:42 by srabah           ###   ########.fr       */
+/*   Updated: 2017/03/13 18:28:28 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 # include <unistd.h>
 # include <limits.h>
 # include <pthread.h>
+# include <errno.h>
 # include <stdio.h>
 # include <sys/types.h>
 # include <sys/mman.h>
@@ -61,6 +62,11 @@ typedef struct			s_block
 typedef struct			s_mem
 {
 	pthread_mutex_t		mutex;
+	pthread_mutex_t		mutex_free;
+	pthread_mutex_t		mutex_real;
+	pthread_mutex_t		mutex_cal;
+	pthread_mutex_t		mutex_show;
+	pthread_mutex_t		mutex_show_ex;
 	unsigned int		page;
 	int					pad;
 	size_t				size_tyni;
@@ -94,7 +100,7 @@ void					free(void *ptr);
 void					show_alloc_mem(void);
 void					show_alloc_mem_ex(void);
 int						check_addr(void *ptr);
-void					*unlock_return_null(void);
+void					*unlock_return_null(pthread_mutex_t *m);
 void					*find_fusion_location(t_block *block, size_t size);
 
 

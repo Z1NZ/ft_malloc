@@ -110,14 +110,26 @@ static void show_list_simple(t_block *tmp, char *name)
 }
 void show_alloc_mem()
 {
+	if (pthread_mutex_lock(&(g_mem.mutex_show)) == EINVAL)
+	{
+		pthread_mutex_init(&(g_mem.mutex_show), NULL);
+		pthread_mutex_lock(&(g_mem.mutex_show));
+	}
 	show_list_simple(g_mem.m_tyni, "TYNI");
 	show_list_simple(g_mem.m_small, "SMALL");
 	show_list_simple(g_mem.m_large, "LARGE");
+	pthread_mutex_unlock(&(g_mem.mutex_show));
 }
 
 void show_alloc_mem_ex()
 {
+	if (pthread_mutex_lock(&(g_mem.mutex_show_ex)) == EINVAL)
+	{
+		pthread_mutex_init(&(g_mem.mutex_show_ex), NULL);
+		pthread_mutex_lock(&(g_mem.mutex_show_ex));
+	}
 	show_list(g_mem.m_tyni, "TYNI");
 	show_list(g_mem.m_small, "SMALL");
 	show_list(g_mem.m_large, "LARGE");
+	pthread_mutex_unlock(&(g_mem.mutex_show_ex));
 }
