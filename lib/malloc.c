@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/15 16:23:41 by srabah            #+#    #+#             */
-/*   Updated: 2017/03/13 11:11:29 by srabah           ###   ########.fr       */
+/*   Updated: 2017/03/13 14:43:01 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "malloc.h"
@@ -56,7 +56,6 @@ static inline void	set_zero_block(void *ptr)
 
 void	*calloc(size_t count, size_t size)
 {
-	// write(2, "calloc\n", 7);
 	void *ptr;
 
 	if (size == 0)
@@ -69,7 +68,6 @@ void	*calloc(size_t count, size_t size)
 
 void	*realloc(void *ptr, size_t size)
 {
-	// write(2, "realloc\n", 8);
 	char	*tmp;
 	size_t	len;
 	size_t	i;
@@ -114,10 +112,10 @@ void	*malloc(size_t size)
 	size_t	len;
 	size_t	len_small;
 
-	pthread_mutex_lock(&(g_mem.mutex));
-	// ft_putnbr_fd(size, 2);
-	// ft_putchar_fd('\n', 2);
 
+	pthread_mutex_lock(&(g_mem.mutex));
+	if (g_mem.page == 0)
+		pthread_mutex_init(&(g_mem.mutex), NULL);
 	if (g_mem.page == 0)
 		g_mem.page = getpagesize();
 	if (!g_mem.size_tyni && !g_mem.size_small)
