@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/15 16:23:41 by srabah            #+#    #+#             */
-/*   Updated: 2017/03/09 10:12:53 by srabah           ###   ########.fr       */
+/*   Updated: 2017/03/13 11:32:11 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # include <stdio.h>
 # include <sys/types.h>
 # include <sys/mman.h>
+# include <string.h>
 
 # define RED   "\x1B[31m"
 # define GRN   "\x1B[32m"
@@ -54,6 +55,8 @@
 # define align4(x) (((((x)-1)>>2)<<2) + 4)
 
 // #define mmap(x, y, z, q, b, c) (void *) -1               /* test du mmap*/
+// verifier le multi thread
+
 typedef struct			s_block
 {
 	size_t				size;/*la taille du bloc alloué*/
@@ -82,73 +85,30 @@ typedef struct			s_mem
 	
 }						t_mem;
 
-int main(int argc, char const *argv[])
-{
-	char	*ptr;
-	char	*ptr2;
-	int		i;
-	int		j;
 
-	i = 0;
-	ptr = NULL;
-	ptr2 = NULL;
-	if (argc != 2)
-		return (1);
-	free(ptr); 
-	write(1, "CALLOC !!!!!\n", 13);
-	while(i < 250)
-	{
-		ptr = (char *)calloc(sizeof(char), atol(argv[1]) * i);
-		if (ptr)
-		{
-			j = 0;
-			while(j <= atoi(argv[1]) * i)
-			{
-				ptr[j] = 'b';
-				j++;
-			}
-			ptr[j] = '\0';
-		}
-		ptr = NULL;
-		i++;
-	}
-	write(1, "REALLOC @@@@\n", 13);
-	i = 0;
-	while(i < 250)
-	{
-		ptr = (char *)realloc(ptr, atol(argv[1]) * i);
-		j = 0;
-		if (ptr)
-		{
-			while(j < atoi(argv[1]) * i)
-			{
-				ptr[j] = 'a';
-				j++;
-			}
-			ptr[j] = '\0';
-			free(ptr);
-		}
-		ptr = NULL;
-		i++;
-	}
-	write(1, "CALLOC @@@@\n", 12);
-	i = 0;
-	while(i < 250)
-	{
-		ptr = (char *)calloc(sizeof(char), atol(argv[1]) * i);
-		j = 0;
-		if (ptr)
-		{	
-			while(j <= atoi(argv[1]) * i)
-			{
-				ptr[j] = 'b';
-				j++;
-			}
-			ptr[j] = '\0';
-			free(ptr);
-		}
-		ptr = NULL;
-		i++;
-	}
-	return 0;
+void		print(char *s)
+{
+	write(1, s, strlen(s));
+}
+
+int			main(void)
+{
+	char	*addr;
+	char	*test;
+
+	addr = malloc(16);
+	free(NULL);
+	free((void *)addr + 5);
+	test = realloc((void *)addr + 5, 10);
+	malloc(1024);
+	test = malloc(500000);
+	test[0] = 's';
+	test[1] = 'q';
+	test[2] = 's';
+	test[3] = 'f';
+	test[4] = 'g';
+
+	show_alloc_mem();
+	show_alloc_mem_ex();
+	return (0);
 }

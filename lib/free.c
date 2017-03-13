@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/17 11:44:30 by srabah            #+#    #+#             */
-/*   Updated: 2017/03/10 13:36:34 by srabah           ###   ########.fr       */
+/*   Updated: 2017/03/13 11:11:10 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,12 +43,14 @@ static inline void	free_splite_block(t_block *ptr, size_t block_size)
 static inline void	unmap_block(t_block **head, t_block *ptr)
 {
 	t_block *tmp;
+	t_block *tampo;
 
 	if (*head == ptr)
 	{
-		*head = ptr->next;
+		tmp = ptr->next;
 		if (munmap(ptr, ptr->size) == -1)
-			write(2, "ERROR UNMAP_BLOCK_1\n", 20);
+			return ;
+		*head = tmp; 
 		return ;
 	}
 	tmp = *head;
@@ -56,20 +58,22 @@ static inline void	unmap_block(t_block **head, t_block *ptr)
 	{
 		if (tmp->next == ptr)
 		{
-			tmp->next = ptr->next;
+			tampo = ptr->next;
 			if (munmap(ptr, ptr->size) == -1)
-				write(2, "ERROR UNMAP_BLOCK_2\n", 20);
+				return ;
+			tmp->next = tampo;
 			break;
 		}
 		tmp = tmp->next;
 	}
 }
 
-static inline int	check_addr(void *ptr)
+int	check_addr(void *ptr)
 {
 	t_block *tmp;
 	int i;
 	int j;
+
 
 	i = 0;
 	tmp = g_mem.m_tyni;
@@ -77,7 +81,7 @@ static inline int	check_addr(void *ptr)
 	j = 0;
 	while(tmp)
 	{
-		if (tmp->ptr == ptr)
+		if (tmp->data == ptr)
 			return (1);
 		tmp = tmp->next;
 		j++;
@@ -94,6 +98,7 @@ static inline int	check_addr(void *ptr)
 
 void	free(void *ptr)
 {
+	// write(2, "free\n", 5);
 	pthread_mutex_lock(&(g_mem.mutex));
 	if (!ptr)
 	{
@@ -117,7 +122,7 @@ void	free(void *ptr)
 			if (((t_block *)(ptr))->size > SMALL_BLOCK)
 				free_splite_block(((t_block *)(ptr)), SMALL_BLOCK);
 			else
-				((t_block *)(ptr))->info ^= OPT_FREE;	
+				((t_block *)(ptr))->info ^= OPT_FREE;
 		}
 		else if (CHECK_BIT(((t_block *)(ptr))->info, OPT_LARGE))
 		{

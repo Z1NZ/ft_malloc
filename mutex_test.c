@@ -2,7 +2,7 @@
 #include <pthread.h>
 #include "malloc.h"
 
-pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;;
+pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
 
 void	test(int mutex)
 {

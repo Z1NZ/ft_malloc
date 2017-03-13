@@ -53,7 +53,6 @@ void	pri_addr(unsigned long long number)
 		i++;
 	}
 	i--;
-	write(1, "0x", 2);
 	while(i > -1)
 	{
 		write(1, &addr[i], 1);
@@ -61,87 +60,64 @@ void	pri_addr(unsigned long long number)
 	}
 }
 
-
-void ft_mem_show(int opt)
+/// faire le show memoire pour bonus
+void show_list(t_block *tmp, char *name)
 {
-	t_block *tmp;
-	int j;
 	int i;
+	int j;
 
-	if (opt == 0 || opt == OPT_TYNI)
+	j = 0;
+	i = 0;
+	while(tmp)
 	{
-		tmp = g_mem.m_tyni;
-		j = 0;
-		i = 0;
-		while(tmp)
-		{
-			if (!CHECK_BIT(tmp->info, OPT_MAP_HEAD))
-				i = 0;
-			ft_putstr("TYNI "RED"pos = [");
-			ft_putnbr(j);
-			ft_putstr("][");
-			ft_putnbr(i);
-			ft_putstr("]"GRN" addr = [");
-			pri_addr((unsigned long long)tmp);
-			ft_putstr("]"CYN" size = [");
-			ft_putnbr((int) (tmp->size));
-			ft_putstr("]"RESET" info = [");
-			ft_putnbr(tmp->info);
-			ft_putstr("]\n");
-			tmp = tmp->next;
-			j++;
-			i++;
-		}
+		if (CHECK_BIT(tmp->info, OPT_MAP_HEAD))
+			i = 0;
+		ft_putstr(name);
+		ft_putstr(RED" pos = [");
+		ft_putnbr(j);
+		ft_putstr("][");
+		ft_putnbr(i);
+		ft_putstr("]"GRN" addr = [");
+		write(1, "0x", 2);
+		pri_addr((unsigned long long)tmp);
+		ft_putstr("]"CYN" size = [");
+		ft_putnbr((int) (tmp->size));
+		ft_putstr("]"RESET" info = [");
+		ft_putnbr(tmp->info);
+		ft_putstr("]\n");
+		tmp = tmp->next;
+		j++;
+		i++;
 	}
-	if (opt == 0 || opt == OPT_SMALL)
-	{
-		tmp = g_mem.m_small;
-		j = 0;
-		i = 0;
-		while(tmp)
-		{
-			if (!CHECK_BIT(tmp->info, OPT_MAP_HEAD))
-				i = 0;
-			ft_putstr("SMALL "RED"pos = [");
-			ft_putnbr(j);
-			ft_putstr("][");
-			ft_putnbr(i);
-			ft_putstr("]"GRN" addr = [");
-			pri_addr((unsigned long long)tmp);
-			ft_putstr("]"CYN" size = [");
-			ft_putnbr((int) (tmp->size));
-			ft_putstr("]"RESET" info = [");
-			ft_putnbr(tmp->info);
-			ft_putstr("]\n");
-			tmp = tmp->next;
-			j++;
-			i++;
-		}
-	}
+}
 
-	if (opt == 0 || opt == OPT_LARGE)
+static void show_list_simple(t_block *tmp, char *name)
+{
+	ft_putstr(name);
+	ft_putstr(":\n");
+	while(tmp)
 	{
-		tmp = g_mem.m_large;
-		j = 0;
-		i = 0;
-		while(tmp)
-		{
-			if (!CHECK_BIT(tmp->info, OPT_MAP_HEAD))
-				i = 0;
-			ft_putstr("LARGE "RED"pos = [");
-			ft_putnbr(j);
-			ft_putstr("][");
-			ft_putnbr(i);
-			ft_putstr("]"GRN" addr = [");
-			pri_addr((unsigned long long)tmp);
-			ft_putstr("]"CYN" size = [");
-			ft_putnbr((int) (tmp->size));
-			ft_putstr("]"RESET" info = [");
-			ft_putnbr(tmp->info);
-			ft_putstr("]\n");
-			tmp = tmp->next;
-			j++;
-			i++;
-		}
+		write(1, "0x", 2);
+		pri_addr((unsigned long long)tmp);
+		ft_putstr(" - ");
+		write(1, "0x", 2);
+		pri_addr((unsigned long long)tmp + (tmp->size));
+		ft_putstr(" : ");
+		ft_putnbr((int) (tmp->size));
+		ft_putstr("\n");
+		tmp = tmp->next;
 	}
+}
+void show_alloc_mem()
+{
+	show_list_simple(g_mem.m_tyni, "TYNI");
+	show_list_simple(g_mem.m_small, "SMALL");
+	show_list_simple(g_mem.m_large, "LARGE");
+}
+
+void show_alloc_mem_ex()
+{
+	show_list(g_mem.m_tyni, "TYNI");
+	show_list(g_mem.m_small, "SMALL");
+	show_list(g_mem.m_large, "LARGE");
 }

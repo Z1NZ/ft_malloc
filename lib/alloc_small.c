@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/15 16:21:17 by srabah            #+#    #+#             */
-/*   Updated: 2017/03/10 12:49:50 by srabah           ###   ########.fr       */
+/*   Updated: 2017/03/13 11:22:46 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,6 @@ static inline void	set_block(t_block *ptr, size_t size, int on)
 	if (on)
 		g_mem.use_small += size;
 }
-
-
-
 
 static inline void	set_page(t_block *ptr, size_t size_block, int nb)
 {
@@ -92,7 +89,10 @@ void				*alloc_small(size_t size)
 	if (g_mem.size_small == 0)
 	{
 		if (init_small_page(ROUND_UP_PAGE(size * SMALL_BLOCK, g_mem.page)) == 1)
+		{
+			pthread_mutex_unlock(&(g_mem.mutex));
 			return (NULL);
+		}
 	}
 	if ((g_mem.size_small - g_mem.use_small) >= SMALL_BLOCK * size)
 		ptr = find_fusion_location(g_mem.m_small, size);
@@ -100,7 +100,10 @@ void				*alloc_small(size_t size)
 	{
 		ptr = add_page(ROUND_UP_PAGE(size * SMALL_BLOCK, g_mem.page));
 		if (!ptr)
+		{
+			pthread_mutex_unlock(&(g_mem.mutex));
 			return (NULL);
+		}
 		ptr = find_fusion_location(g_mem.m_small, size);
 	}
 	if (ptr && ptr != ((void *)-1))

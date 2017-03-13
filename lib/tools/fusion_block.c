@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/15 16:26:24 by srabah            #+#    #+#             */
-/*   Updated: 2017/03/10 13:49:30 by srabah           ###   ########.fr       */
+/*   Updated: 2017/03/11 16:30:40 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ void	*find_fusion_location(t_block *block, size_t size)
 				return(ptr);
 			ptr = ptr->next;
 		}
+		return (NULL);
 	}
 	ptr = block;
 	while (ptr)
