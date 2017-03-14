@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_mem_show.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/03/14 20:05:27 by srabah            #+#    #+#             */
+/*   Updated: 2017/03/14 20:05:51 by srabah           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "malloc.h"
 
-void	ft_putchar(char c)
+void			ft_putchar(char c)
 {
 	write(1, &c, 1);
 }
@@ -22,7 +34,7 @@ void			ft_putnbr(int n)
 	ft_putchar(u_nbr % 10 + '0');
 }
 
-size_t	ft_strlen(const char *s)
+size_t			ft_strlen(const char *s)
 {
 	char const	*p_s = s;
 
@@ -31,44 +43,43 @@ size_t	ft_strlen(const char *s)
 	return (p_s - s);
 }
 
-void	ft_putstr(char *s)
+void			ft_putstr(char *s)
 {
 	write(1, s, ft_strlen(s));
 }
 
-void	pri_addr(unsigned long long number)
+void			pri_addr(unsigned long long number)
 {
-	char base[] = "0123456789abcdef";
-	int current_rest = 0;
-	char addr[16];
-	int i;
+	static char	base[] = "0123456789abcdef";
+	int			current_rest;
+	char		addr[16];
+	int			i;
 
+	current_rest = 0;
 	i = 0;
-	while(number)
+	while (number)
 	{
 		current_rest = number % 16;
-
 		addr[i] = base[current_rest];
 		number /= 16;
 		i++;
 	}
 	i--;
-	while(i > -1)
+	while (i > -1)
 	{
 		write(1, &addr[i], 1);
 		i--;
 	}
 }
 
-/// faire le show memoire pour bonus
-void show_list(t_block *tmp, char *name)
+void			show_list(t_block *tmp, char *name)
 {
 	int i;
 	int j;
 
 	j = 0;
 	i = 0;
-	while(tmp)
+	while (tmp)
 	{
 		if (CHECK_BIT(tmp->info, OPT_MAP_HEAD))
 			i = 0;
@@ -77,11 +88,10 @@ void show_list(t_block *tmp, char *name)
 		ft_putnbr(j);
 		ft_putstr("][");
 		ft_putnbr(i);
-		ft_putstr("]"GRN" addr = [");
-		write(1, "0x", 2);
+		ft_putstr("]"GRN" addr = [0x");
 		pri_addr((unsigned long long)tmp);
 		ft_putstr("]"CYN" size = [");
-		ft_putnbr((int) (tmp->size));
+		ft_putnbr((int)(tmp->size));
 		ft_putstr("]"RESET" info = [");
 		ft_putnbr(tmp->info);
 		ft_putstr("]\n");
@@ -91,11 +101,11 @@ void show_list(t_block *tmp, char *name)
 	}
 }
 
-static void show_list_simple(t_block *tmp, char *name)
+static void		show_list_simple(t_block *tmp, char *name)
 {
 	ft_putstr(name);
 	ft_putstr(":\n");
-	while(tmp)
+	while (tmp)
 	{
 		write(1, "0x", 2);
 		pri_addr((unsigned long long)tmp);
@@ -103,12 +113,13 @@ static void show_list_simple(t_block *tmp, char *name)
 		write(1, "0x", 2);
 		pri_addr((unsigned long long)tmp + (tmp->size));
 		ft_putstr(" : ");
-		ft_putnbr((int) (tmp->size));
+		ft_putnbr((int)(tmp->size));
 		ft_putstr("\n");
 		tmp = tmp->next;
 	}
 }
-void show_alloc_mem()
+
+void			show_alloc_mem(void)
 {
 	if (pthread_mutex_lock(&(g_mem.mutex_show)) == EINVAL)
 	{
@@ -121,7 +132,7 @@ void show_alloc_mem()
 	pthread_mutex_unlock(&(g_mem.mutex_show));
 }
 
-void show_alloc_mem_ex()
+void			show_alloc_mem_ex(void)
 {
 	if (pthread_mutex_lock(&(g_mem.mutex_show_ex)) == EINVAL)
 	{

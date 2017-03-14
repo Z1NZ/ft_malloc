@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/15 16:26:24 by srabah            #+#    #+#             */
-/*   Updated: 2017/03/11 16:30:40 by srabah           ###   ########.fr       */
+/*   Updated: 2017/03/14 20:30:48 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,10 @@ void	*find_fusion_location(t_block *block, size_t size)
 	tmp = NULL;
 	if (size == 1)
 	{
-		while(ptr)
+		while (ptr)
 		{
 			if (!CHECK_BIT(ptr->info, OPT_FREE))
-				return(ptr);
+				return (ptr);
 			ptr = ptr->next;
 		}
 		return (NULL);

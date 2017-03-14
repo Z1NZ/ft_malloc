@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/17 11:44:30 by srabah            #+#    #+#             */
-/*   Updated: 2017/03/14 12:45:19 by srabah           ###   ########.fr       */
+/*   Updated: 2017/03/14 20:07:40 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ int	check_addr(void *ptr)
 
 	i = 0;
 	tmp = g_mem.m_tyni;
-	while(i < 3)
+	while (i < 3)
 	{
 		j = 0;
 		while (tmp)
@@ -97,13 +97,11 @@ int	check_addr(void *ptr)
 
 void	free(void *ptr)
 {
-	write(2, "FREE", 4);
 	if (pthread_mutex_lock(&(g_mem.mutex_free)) == EINVAL)
 	{
 		pthread_mutex_init(&(g_mem.mutex_free), NULL);
-		pthread_mutex_lock(&(g_mem.mutex_free));	
+		pthread_mutex_lock(&(g_mem.mutex_free));
 	}
-	write(1, "FREE\n", 5);
 	if (!ptr)
 	{
 		pthread_mutex_unlock(&(g_mem.mutex_free));

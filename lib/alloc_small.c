@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/15 16:21:17 by srabah            #+#    #+#             */
-/*   Updated: 2017/03/13 11:22:46 by srabah           ###   ########.fr       */
+/*   Updated: 2017/03/14 20:31:46 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,8 @@ static void			*add_page(size_t size)
 	t_block		*ptr;
 	t_block		*tmp;
 
-	ptr = (t_block *)mmap(NULL, (g_mem.page * size), FLAG_MALLOC, -1, 0);
-	if (ptr == ((void *)-1))
+	if ((ptr = (t_block *)mmap(NULL,
+			(g_mem.page * size), FLAG_MALLOC, -1, 0)) == MAP_FAILED)
 		return (NULL);
 	g_mem.size_small += g_mem.page * size;
 	tmp = g_mem.m_small;
@@ -69,8 +69,8 @@ static int			init_small_page(size_t nb)
 {
 	t_block *ptr;
 
-	ptr = (t_block *)mmap(NULL, g_mem.page *nb, FLAG_MALLOC, -1, 0);
-	if (ptr == ((void *)-1))
+	if ((ptr = (t_block *)mmap(NULL,
+		g_mem.page * nb, FLAG_MALLOC, -1, 0)) == MAP_FAILED)
 		return (1);
 	g_mem.size_small = g_mem.page * nb;
 	ptr->info |= OPT_MAP_HEAD;

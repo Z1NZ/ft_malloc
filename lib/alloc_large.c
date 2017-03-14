@@ -6,13 +6,13 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/14 08:44:38 by srabah            #+#    #+#             */
-/*   Updated: 2017/03/14 08:10:45 by srabah           ###   ########.fr       */
+/*   Updated: 2017/03/14 21:01:42 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc.h"
 
-static t_block	*add_large_list(size_t size)
+static t_block		*add_large_list(size_t size)
 {
 	t_block	*ptr;
 	t_block	*tmp;
@@ -20,8 +20,7 @@ static t_block	*add_large_list(size_t size)
 	size = size + SIZE_ST_HEAD;
 	size = ROUND_UP_PAGE(size, g_mem.page);
 	size = (size) * g_mem.page;
-	tmp = (t_block *)mmap(NULL, size, FLAG_MALLOC, -1, 0);
-	if (tmp == ((void *)-1))
+	if ((tmp = (t_block *)mmap(NULL, size, FLAG_MALLOC, -1, 0)) == MAP_FAILED)
 		return (NULL);
 	tmp->size = size;
 	tmp->info |= OPT_FREE;
@@ -30,22 +29,17 @@ static t_block	*add_large_list(size_t size)
 	tmp->next = NULL;
 	tmp->ptr = tmp->data;
 	if (!(g_mem.m_large))
-	{
-		g_mem.m_large = tmp;
-		return (tmp);
-	}
+		return ((g_mem.m_large = tmp));
 	ptr = g_mem.m_large;
 	while (ptr->next)
-	{
 		ptr = ptr->next;
-	}
 	ptr->next = tmp;
 	return (tmp);
 }
 
-void	*alloc_large(size_t size)
+void				*alloc_large(size_t size)
 {
-	t_block *ptr;
+	t_block	*ptr;
 
 	ptr = NULL;
 	ptr = add_large_list(size);
