@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/14 08:44:38 by srabah            #+#    #+#             */
-/*   Updated: 2017/03/13 11:25:11 by srabah           ###   ########.fr       */
+/*   Updated: 2017/03/14 08:10:45 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,8 @@ static t_block	*add_large_list(size_t size)
 	t_block	*ptr;
 	t_block	*tmp;
 
-
 	size = size + SIZE_ST_HEAD;
-	ROUND_UP_PAGE(size, g_mem.page);
+	size = ROUND_UP_PAGE(size, g_mem.page);
 	size = (size) * g_mem.page;
 	tmp = (t_block *)mmap(NULL, size, FLAG_MALLOC, -1, 0);
 	if (tmp == ((void *)-1))
@@ -33,17 +32,16 @@ static t_block	*add_large_list(size_t size)
 	if (!(g_mem.m_large))
 	{
 		g_mem.m_large = tmp;
-		return(tmp);
+		return (tmp);
 	}
 	ptr = g_mem.m_large;
-	while(ptr->next)
+	while (ptr->next)
 	{
 		ptr = ptr->next;
 	}
 	ptr->next = tmp;
-	return(tmp);
+	return (tmp);
 }
-
 
 void	*alloc_large(size_t size)
 {

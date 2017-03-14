@@ -6,7 +6,7 @@
 /*   By: srabah <srabah@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/15 16:25:37 by srabah            #+#    #+#             */
-/*   Updated: 2017/03/13 18:28:28 by srabah           ###   ########.fr       */
+/*   Updated: 2017/03/14 12:56:48 by srabah           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@
 # define SMALL_MIN			480
 # define SMALL_BLOCK		(SMALL_MIN + 32)
 # define LARGE_MIN			1024
-# define FLAG_MALLOC		PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE | MAP_SHARED
+# define FLAG_MALLOC		PROT_READ | PROT_WRITE, MAP_ANON | MAP_SHARED
 # define ROUND_UP_PAGE(x, page)	((x % page)  != 0) ? x / page + 1 : x / page
 # define OFFSETOFF(TYPE, MEMBER) ((size_t) &((TYPE *)0)->MEMBER)
 # define align8(x) (((((x)-1)>>4)<<4) + 8)
@@ -81,7 +81,7 @@ typedef struct			s_mem
 	void				*main_memory;
 }						t_mem;
 
-t_mem					g_mem;
+t_mem					*g_mem;
 /*
 ** LIB
 */
@@ -92,6 +92,7 @@ void					*alloc_small(size_t size);
 void					*malloc(size_t size);
 void					*calloc(size_t count, size_t size);
 void					*realloc(void *ptr, size_t nb);
+void					*reallocf(void *ptr, size_t size);
 void					free(void *ptr);
 
 /*
