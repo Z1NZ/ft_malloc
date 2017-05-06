@@ -68,7 +68,7 @@ static inline void	unmap_block(t_block **head, t_block *ptr)
 	}
 }
 
-int	check_addr(void *ptr)
+int					check_addr(void *ptr)
 {
 	t_block	*tmp;
 	int		i;
@@ -95,7 +95,34 @@ int	check_addr(void *ptr)
 	return (0);
 }
 
-void	free(void *ptr)
+static void			free_block(void *ptr)
+{
+	ptr -= OFFSETOFF(t_block, data);
+	if (CHECK_BIT(((t_block *)(ptr))->info, OPT_TYNI))
+	{
+		g_mem.use_tyni -= ((t_block *)(ptr))->size;
+		if (((t_block *)(ptr))->size > TYNI_BLOCK)
+			free_splite_block(((t_block *)(ptr)), TYNI_BLOCK);
+		else
+			((t_block *)(ptr))->info ^= OPT_FREE;
+	}
+	else if (CHECK_BIT(((t_block *)(ptr))->info, OPT_SMALL))
+	{
+		g_mem.use_small -= ((t_block *)(ptr))->size;
+		if (((t_block *)(ptr))->size > SMALL_BLOCK)
+			free_splite_block(((t_block *)(ptr)), SMALL_BLOCK);
+		else
+			((t_block *)(ptr))->info ^= OPT_FREE;
+	}
+	else if (CHECK_BIT(((t_block *)(ptr))->info, OPT_LARGE))
+	{
+		g_mem.use_large -= ((t_block *)(ptr))->size;
+		g_mem.size_large -= ((t_block *)(ptr))->size;
+		unmap_block(&g_mem.m_large, ptr);
+	}
+}
+
+void				free(void *ptr)
 {
 	if (pthread_mutex_lock(&(g_mem.mutex_free)) == EINVAL)
 	{
@@ -108,30 +135,6 @@ void	free(void *ptr)
 		return ;
 	}
 	if ((check_addr(ptr)) > 0)
-	{
-		ptr -= OFFSETOFF(t_block, data);
-		if (CHECK_BIT(((t_block *)(ptr))->info, OPT_TYNI))
-		{
-			g_mem.use_tyni -= ((t_block *)(ptr))->size;
-			if (((t_block *)(ptr))->size > TYNI_BLOCK)
-				free_splite_block(((t_block *)(ptr)), TYNI_BLOCK);
-			else
-				((t_block *)(ptr))->info ^= OPT_FREE;
-		}
-		else if (CHECK_BIT(((t_block *)(ptr))->info, OPT_SMALL))
-		{
-			g_mem.use_small -= ((t_block *)(ptr))->size;
-			if (((t_block *)(ptr))->size > SMALL_BLOCK)
-				free_splite_block(((t_block *)(ptr)), SMALL_BLOCK);
-			else
-				((t_block *)(ptr))->info ^= OPT_FREE;
-		}
-		else if (CHECK_BIT(((t_block *)(ptr))->info, OPT_LARGE))
-		{
-			g_mem.use_large -= ((t_block *)(ptr))->size;
-			g_mem.size_large -= ((t_block *)(ptr))->size;
-			unmap_block(&g_mem.m_large, ptr);
-		}
-	}
+		free_block(ptr);
 	pthread_mutex_unlock(&(g_mem.mutex_free));
 }

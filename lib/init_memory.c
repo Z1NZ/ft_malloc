@@ -12,7 +12,7 @@
 
 #include "malloc.h"
 
-static inline void	set_block(t_block *ptr, size_t size, int opt)
+static inline void		set_block(t_block *ptr, size_t size, int opt)
 {
 	ptr->size = size;
 	ptr->info |= opt;
@@ -45,7 +45,7 @@ static inline	void	set_page
 	tmp->next = NULL;
 }
 
-int		init_memory(size_t block_tyni, size_t block_small)
+int						init_memory(size_t block_tyni, size_t block_small)
 {
 	unsigned int i;
 

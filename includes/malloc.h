@@ -98,6 +98,11 @@ void					free(void *ptr);
 /*
 ** TOOLS
 */
+size_t					ft_strlen(const char *s);
+void					ft_putnbr(int n);
+void					ft_putstr(char *s);
+size_t					ft_strlen(const char *s);
+void					ft_putchar(char c);
 void					show_alloc_mem(void);
 void					show_alloc_mem_ex(void);
 int						check_addr(void *ptr);

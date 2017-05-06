@@ -12,42 +12,6 @@
 
 #include "malloc.h"
 
-void			ft_putchar(char c)
-{
-	write(1, &c, 1);
-}
-
-void			ft_putnbr(int n)
-{
-	unsigned int	count;
-	unsigned int	u_nbr;
-
-	count = 0;
-	u_nbr = n;
-	if (n < 0)
-	{
-		ft_putchar('-');
-		u_nbr = -n;
-	}
-	if (u_nbr / 10)
-		ft_putnbr(u_nbr / 10);
-	ft_putchar(u_nbr % 10 + '0');
-}
-
-size_t			ft_strlen(const char *s)
-{
-	char const	*p_s = s;
-
-	while (*p_s)
-		p_s++;
-	return (p_s - s);
-}
-
-void			ft_putstr(char *s)
-{
-	write(1, s, ft_strlen(s));
-}
-
 void			pri_addr(unsigned long long number)
 {
 	static char	base[] = "0123456789abcdef";
