@@ -87,13 +87,11 @@ void				*alloc_small(size_t size)
 
 	ptr = NULL;
 	if (g_mem.size_small == 0)
-	{
 		if (init_small_page(ROUND_UP_PAGE(size * SMALL_BLOCK, g_mem.page)) == 1)
 		{
 			pthread_mutex_unlock(&(g_mem.mutex));
 			return (NULL);
 		}
-	}
 	if ((g_mem.size_small - g_mem.use_small) >= SMALL_BLOCK * size)
 		ptr = find_fusion_location(g_mem.m_small, size);
 	if (!ptr)
