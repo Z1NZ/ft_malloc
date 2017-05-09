@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #ifndef MALLOC_H
-
+# define MALLOC_H
 # include <unistd.h>
 # include <limits.h>
 # include <pthread.h>
@@ -41,13 +41,10 @@
 # define SMALL_MIN			480
 # define SMALL_BLOCK		(SMALL_MIN + 32)
 # define LARGE_MIN			1024
-# define FLAG_MALLOC		PROT_READ | PROT_WRITE, MAP_ANON | MAP_SHARED | MAP_HASSEMAPHORE
+# define FLAG_MALLOC PROT_READ | PROT_WRITE,MAP_ANON|MAP_SHARED|MAP_HASSEMAPHORE
 # define ROUND_UP_PAGE(x, page)	((x % page)  != 0) ? x / page + 1 : x / page
 # define OFFSETOFF(TYPE, MEMBER) ((size_t) &((TYPE *)0)->MEMBER)
-# define align8(x) (((((x)-1)>>4)<<4) + 8)
-# define align4(x) (((((x)-1)>>2)<<2) + 4)
 # define ABS(number)			(number < 0) ? -(number) : (number)
-
 
 typedef struct			s_block
 {
@@ -107,6 +104,5 @@ void					show_alloc_mem_ex(void);
 int						check_addr(void *ptr);
 void					*unlock_return_null(pthread_mutex_t *m);
 void					*find_fusion_location(t_block *block, size_t size);
-
 
 #endif

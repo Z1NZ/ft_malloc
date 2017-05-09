@@ -17,7 +17,6 @@ static t_block		*add_large_list(size_t size)
 	t_block	*ptr;
 	t_block	*tmp;
 
-
 	size = size + SIZE_ST_HEAD;
 	size = ROUND_UP_PAGE(size, g_mem.page);
 	size = (size) * g_mem.page;
