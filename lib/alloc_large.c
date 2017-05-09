@@ -17,11 +17,12 @@ static t_block		*add_large_list(size_t size)
 	t_block	*ptr;
 	t_block	*tmp;
 
+
 	size = size + SIZE_ST_HEAD;
 	size = ROUND_UP_PAGE(size, g_mem.page);
 	size = (size) * g_mem.page;
 	if ((tmp = (t_block *)mmap(NULL, size, FLAG_MALLOC, -1, 0)) == MAP_FAILED)
-		return (NULL);
+		return (tmp);
 	tmp->size = size;
 	tmp->info |= OPT_FREE;
 	tmp->info |= OPT_MAP_HEAD;
